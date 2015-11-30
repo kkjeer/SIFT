@@ -35,15 +35,15 @@ THREE.LeapObjectControls = function(camera, object) {
   
   // Don't need this function for SIFT app
   // scale
-  // this.scaleEnabled       = true;
-  // this.scaleSpeed         = 1.0;
-  // this.scaleHands         = 1;
-  // this.scaleFingers       = [4, 5];
-  // this.scaleRightHanded   = true;
-  // this.scaleHandPosition  = true;
-  // this.scaleStabilized    = false;
-  // this.scaleMin           = 0.1;
-  // this.scaleMax           = 10;
+  this.scaleEnabled       = true;
+  this.scaleSpeed         = 1.0;
+  this.scaleHands         = 1;
+  this.scaleFingers       = [4, 5];
+  this.scaleRightHanded   = true;
+  this.scaleHandPosition  = true;
+  this.scaleStabilized    = false;
+  this.scaleMin           = 0.1;
+  this.scaleMax           = 10;
   
   // pan
   this.panEnabled         = true;
@@ -53,6 +53,15 @@ THREE.LeapObjectControls = function(camera, object) {
   this.panRightHanded     = true;
   this.panHandPosition    = true;
   this.panStabilized      = false;
+
+  //click
+  this.clickEnabled       = true;
+  this.clickSpeed         = 4.0;
+  this.clickHands         = 1;
+  this.clickFingers       = 1;
+  this.clickRighHanded    = true;
+  this.clickHandPostiion  = true;
+  this.clickStabilized    = false;
   
   // internals
   var _rotateXLast        = null;
@@ -67,10 +76,12 @@ THREE.LeapObjectControls = function(camera, object) {
     switch(action) {
       case 'rotate':
         return _this.rotateSpeed * (_this.rotateHandPosition ? 1 : _this.fingerFactor);
-      // case 'scale':
-      //   return _this.scaleSpeed * (_this.scaleHandPosition ? 1 : _this.fingerFactor);
+      case 'scale':
+        return _this.scaleSpeed * (_this.scaleHandPosition ? 1 : _this.fingerFactor);
       case 'pan':
         return _this.panSpeed * (_this.panHandPosition ? 1 : _this.fingerFactor);
+      case 'click':
+        return _this.clickSpeed * (_this.clickHandPostiion ? 1 : _this.fingerFactor);
     };
   };
 
@@ -78,12 +89,16 @@ THREE.LeapObjectControls = function(camera, object) {
     return _this.transformFactor('rotate') * THREE.Math.mapLinear(delta, -400, 400, -Math.PI, Math.PI);
   };
 
-  // this.scaleTransform = function(delta) {
-  //   return _this.transformFactor('scale') * THREE.Math.mapLinear(delta, -400, 400, -2, 2);
-  // };
+  this.scaleTransform = function(delta) {
+    return _this.transformFactor('scale') * THREE.Math.mapLinear(delta, -400, 400, -2, 2);
+  };
 
   this.panTransform = function(delta) {
     return _this.transformFactor('pan') * THREE.Math.mapLinear(delta, -400, 400, -_this.step, _this.step);
+  };
+
+  this.clickTransform = function (delta) {
+    return _this.transformFactor('click') * THREE.Math.mapLinear(delta, -400, 400, -_this.step, _this.step);
   };
 
   this.applyGesture = function(frame, action) {
@@ -106,21 +121,21 @@ THREE.LeapObjectControls = function(camera, object) {
           };
         };
         break;
-      // case 'scale':
-      //   if (_this.scaleHands instanceof Array) {
-      //     if (_this.scaleFingers instanceof Array) {
-      //       if (_this.scaleHands[0] <= hl && hl <= _this.scaleHands[1] && _this.scaleFingers[0] <= fl && fl <= _this.scaleFingers[1]) return true;
-      //     } else {
-      //       if (_this.scaleHands[0] <= hl && hl <= _this.scaleHands[1] && _this.scaleFingers == fl) return true;
-      //     };
-      //   } else {
-      //     if (_this.scaleFingers instanceof Array) {
-      //       if (_this.scaleHands == hl && _this.scaleFingers[0] <= fl && fl <= _this.scaleFingers[1]) return true;
-      //     } else {
-      //       if (_this.scaleHands == hl && _this.scaleFingers == fl) return true;
-      //     };
-      //   };
-      //   break;
+      case 'scale':
+        if (_this.scaleHands instanceof Array) {
+          if (_this.scaleFingers instanceof Array) {
+            if (_this.scaleHands[0] <= hl && hl <= _this.scaleHands[1] && _this.scaleFingers[0] <= fl && fl <= _this.scaleFingers[1]) return true;
+          } else {
+            if (_this.scaleHands[0] <= hl && hl <= _this.scaleHands[1] && _this.scaleFingers == fl) return true;
+          };
+        } else {
+          if (_this.scaleFingers instanceof Array) {
+            if (_this.scaleHands == hl && _this.scaleFingers[0] <= fl && fl <= _this.scaleFingers[1]) return true;
+          } else {
+            if (_this.scaleHands == hl && _this.scaleFingers == fl) return true;
+          };
+        };
+        break;
       case 'pan':
         if (_this.panHands instanceof Array) {
           if (_this.panFingers instanceof Array) {
@@ -136,6 +151,20 @@ THREE.LeapObjectControls = function(camera, object) {
           };
         };
         break;
+      case 'click':
+        if (_this.clickHands instanceof Array) {
+          if (_this.clickFingers instanceof Array) {
+            if (_this.clickHands[0] <= hl && hl <= _this.clickHands[1] && _this.clickFingers[0] <= fl && fl <= _this.clickFingers[1]) return true;
+          } else {
+            if (_this.clickHands[0] <= hl && hl <= _this.clickHands[1] && _this.clickFingers == fl) return true;
+          };
+        } else {
+          if (_this.clickFingers instanceof Array) {
+            if (_this.clickHands == hl && _this.clickFingers[0] <= fl && fl <= _this.clickFingers[1]) return true;
+          } else {
+            if (_this.clickHands == hl && _this.clickFingers == fl) return true;
+          };
+        };
     };
 
     return false;
@@ -163,14 +192,20 @@ THREE.LeapObjectControls = function(camera, object) {
             } else {
               return lh;
             };
-          // case 'scale':
-          //   if (_this.scaleRightHanded) {
-          //     return rh;
-          //   } else {
-          //     return lh;
-          //   };
+          case 'scale':
+            if (_this.scaleRightHanded) {
+              return rh;
+            } else {
+              return lh;
+            };
           case 'pan':
             if (_this.panRightHanded) {
+              return rh;
+            } else {
+              return lh;
+            };
+          case 'click':
+            if (_this.clickRighHanded) {
               return rh;
             } else {
               return lh;
@@ -192,17 +227,23 @@ THREE.LeapObjectControls = function(camera, object) {
           ? (_this.rotateStabilized ? h.stabilizedPalmPosition : h.palmPosition) 
           : (_this.rotateStabilized ? frame.pointables[0].stabilizedTipPosition : frame.pointables[0].tipPosition)
         );
-      // case 'scale':
-      //   h = _this.hand(frame, 'scale');
-      //   return (_this.scaleHandPosition 
-      //     ? (_this.scaleStabilized ? h.stabilizedPalmPosition : h.palmPosition) 
-      //     : (_this.scaleStabilized ? frame.pointables[0].stabilizedTipPosition : frame.pointables[0].tipPosition)
-      //   );
+      case 'scale':
+        h = _this.hand(frame, 'scale');
+        return (_this.scaleHandPosition 
+          ? (_this.scaleStabilized ? h.stabilizedPalmPosition : h.palmPosition) 
+          : (_this.scaleStabilized ? frame.pointables[0].stabilizedTipPosition : frame.pointables[0].tipPosition)
+        );
       case 'pan':
         h = _this.hand(frame, 'pan');
         return (_this.panHandPosition
           ? (_this.panStabilized ? h.stabilizedPalmPosition : h.palmPosition) 
           : (_this.panStabilized ? frame.pointables[0].stabilizedTipPosition : frame.pointables[0].tipPosition)
+        );
+      case 'click':
+        h = _this.hand(frame, 'click');
+        return (_this.clickHandPosition
+          ? (_this.clickStabilized ? h.stabilizedPalmPosition : h.palmPosition) 
+          : (_this.clickStabilized ? frame.pointables[0].stabilizedTipPosition : frame.pointables[0].tipPosition)
         );
     };
   };
@@ -245,27 +286,27 @@ THREE.LeapObjectControls = function(camera, object) {
     };
   };
 
-  // this.scaleObject = function(frame) {
-  //   if (_this.scaleEnabled && _this.applyGesture(frame, 'scale')) {
-  //     var z = _this.position(frame, 'scale')[2];
-  //     if (!_scaleZLast) _scaleZLast = z;
-  //     var zDelta = z - _scaleZLast;
-  //     scaleDelta = _this.scaleTransform(zDelta);
-  //     var newScale = _this.object.scale.x + scaleDelta;
-  //     if (_this.scaleMin < newScale && newScale < _this.scaleMax) {
-  //       _this.object.scale = new THREE.Vector3(newScale, newScale, newScale);
-  //     };
+  this.scaleObject = function(frame) {
+    if (_this.scaleEnabled && _this.applyGesture(frame, 'scale')) {
+      var z = _this.position(frame, 'scale')[2];
+      if (!_scaleZLast) _scaleZLast = z;
+      var zDelta = z - _scaleZLast;
+      scaleDelta = _this.scaleTransform(zDelta);
+      var newScale = _this.object.scale.x + scaleDelta;
+      if (_this.scaleMin < newScale && newScale < _this.scaleMax) {
+        _this.object.scale = new THREE.Vector3(newScale, newScale, newScale);
+      };
 
-  //     _scaleZLast  = z; 
-  //     _rotateXLast = null;
-  //     _rotateYLast = null;
-  //     _panXLast    = null;
-  //     _panYLast    = null;
-  //     _panZLast    = null;
-  //   } else {
-  //     _scaleZLast  = null; 
-  //   };
-  // };
+      _scaleZLast  = z; 
+      _rotateXLast = null;
+      _rotateYLast = null;
+      _panXLast    = null;
+      _panYLast    = null;
+      _panZLast    = null;
+    } else {
+      _scaleZLast  = null; 
+    };
+  };
 
   this.panObject = function(frame) {
     if (_this.panEnabled && _this.applyGesture(frame, 'pan')) {
@@ -295,6 +336,24 @@ THREE.LeapObjectControls = function(camera, object) {
       _panZLast = null;     
     };
   };
+
+  // Need to work on!!!!!
+  this.clickObject = function (frame) {
+    if (_this.clickEnabled && _this.applyGesture(frame, 'click')) {
+      var z = _this.position(frame, 'click')[2];
+      if (!_clickZLast) _clickZLast = z;
+      var zDelta = z - _clickZLast;
+
+      _clickZLast  = z;
+      _rotateXLast = null;
+      _rotateYLast = null;
+      _panXLast    = null;
+      _panYLast    = null;
+      _panZLast    = null;
+    } else {
+      _clickZLast  = null; 
+    };
+  }:
 
   this.update = function(frame) {
     if (_this.enabled) {
