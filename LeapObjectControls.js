@@ -344,6 +344,8 @@ THREE.LeapObjectControls = function(camera, object) {
       if (!_clickZLast) _clickZLast = z;
       var zDelta = z - _clickZLast;
 
+      _this.object.click.z += _this.clickTransform(zDelta/4);
+
       _clickZLast  = z;
       _rotateXLast = null;
       _rotateYLast = null;

@@ -56,11 +56,12 @@
         cameraControls.zoomMin        = 50;
         cameraControls.zoomMax        = 1000;
         
-        cameraControls.panEnabled     = true;
-        cameraControls.panSpeed       = 2;
-        cameraControls.panHands       = 2;
-        cameraControls.panFingers     = [6, 12];
-        cameraControls.panRightHanded = false; // for left-handed person
+        // The panning of the camera is disabled for the SIFT app
+        cameraControls.panEnabled     = false;
+        // cameraControls.panSpeed       = 2;
+        // cameraControls.panHands       = 2;
+        // cameraControls.panFingers     = [6, 12];
+        // cameraControls.panRightHanded = false; // for left-handed person
 
         // world
         scene = new THREE.Scene(); 
