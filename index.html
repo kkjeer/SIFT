@@ -11,6 +11,7 @@
     <script type="text/javascript" src="js/Detector.js"></script>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/tween_full.js"></script>
     <script type="text/javascript" src="js/leap.min.js"></script>
     <script type="text/javascript" src="LeapCameraControls.js"></script>
     <script type="text/javascript" src="LeapObjectControls.js"></script>
@@ -225,7 +226,9 @@
 
 
       function render() {
+        requestAnimationFrame(render); //temporary - for testing without the LeapMotion
         renderer.render(scene, camera);
+        TWEEN.update();
       };
 
       function onWindowResize() {

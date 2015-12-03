@@ -6,6 +6,14 @@ function Book (width, height, depth, color, name) {
 	this.color = color;
 	this.name = name;
 
+	//animation properties: pulling off and on the shelf
+	this.isOut = false;
+	this.inOutDistance = 0.6 * this.width;
+	this.inOutTime = 700;
+
+	//animation properties: falling to the floor
+	this.mass = 0.5 * this.height * this.width * this.depth;
+
 	//page properties
 	this.pageColor = 0xffefdb;
 	this.pageWidth = 0.9 * this.width;
@@ -15,6 +23,34 @@ function Book (width, height, depth, color, name) {
 	this.frame = new THREE.Object3D();
 	this.frame.name = this.name;
 	this.addInnerFrame();
+}
+
+Book.prototype.pullOut = function () {
+	if (this.isOut) {
+		return;
+	}
+
+	var book = this;
+	var outPos = {x: this.frame.position.x, y: this.frame.position.y, z: this.frame.position.z + this.inOutDistance};
+	book.pullTween = new TWEEN.Tween(book.frame.position).to(outPos, book.inOutTime).onComplete(function () {
+		book.isOut = true;
+	}).start();
+}
+
+Book.prototype.pushIn = function () {
+	if (!this.isOut) {
+		return;
+	}
+
+	var book = this;
+	var inPos = {x: this.frame.position.x, y: this.frame.position.y, z: this.frame.position.z - this.inOutDistance};
+	book.pushTween = new TWEEN.Tween(book.frame.position).to(inPos, book.inOutTime).onComplete(function () {
+		book.isOut = false;
+	}).start();
+}
+
+Book.prototype.fall = function () {
+
 }
 
 //origin: center of left edge
@@ -137,7 +173,7 @@ Book.prototype.makePage = function () {
 	var pageFrame = new THREE.Object3D();
 	pageFrame.name = this.name + 'PageFrame';
 
-	var pageGeom = new THREE.PlaneGeometry(this.pageWidth, this.height);
+	var pageGeom = new THREE.CubeGeometry(this.pageWidth, this.height, 0.005 * this.depth);
 	var pageMat = new THREE.MeshPhongMaterial({color: this.pageColor, ambient: this.pageColor});
 	var page = new THREE.Mesh(pageGeom, pageMat);
 	page.name = this.name + 'PageMesh';
