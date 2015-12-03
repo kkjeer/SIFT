@@ -53,15 +53,6 @@ THREE.LeapObjectControls = function(camera, object) {
   this.panRightHanded     = true;
   this.panHandPosition    = true;
   this.panStabilized      = false;
-
-  //click
-  this.clickEnabled       = true;
-  this.clickSpeed         = 4.0;
-  this.clickHands         = 1;
-  this.clickFingers       = 1;
-  this.clickRighHanded    = true;
-  this.clickHandPostiion  = true;
-  this.clickStabilized    = false;
   
   // internals
   var _rotateXLast        = null;
@@ -80,8 +71,6 @@ THREE.LeapObjectControls = function(camera, object) {
         return _this.scaleSpeed * (_this.scaleHandPosition ? 1 : _this.fingerFactor);
       case 'pan':
         return _this.panSpeed * (_this.panHandPosition ? 1 : _this.fingerFactor);
-      case 'click':
-        return _this.clickSpeed * (_this.clickHandPostiion ? 1 : _this.fingerFactor);
     };
   };
 
@@ -97,9 +86,6 @@ THREE.LeapObjectControls = function(camera, object) {
     return _this.transformFactor('pan') * THREE.Math.mapLinear(delta, -400, 400, -_this.step, _this.step);
   };
 
-  this.clickTransform = function (delta) {
-    return _this.transformFactor('click') * THREE.Math.mapLinear(delta, -400, 400, -_this.step, _this.step);
-  };
 
   this.applyGesture = function(frame, action) {
     var hl = frame.hands.length;
@@ -151,20 +137,6 @@ THREE.LeapObjectControls = function(camera, object) {
           };
         };
         break;
-      case 'click':
-        if (_this.clickHands instanceof Array) {
-          if (_this.clickFingers instanceof Array) {
-            if (_this.clickHands[0] <= hl && hl <= _this.clickHands[1] && _this.clickFingers[0] <= fl && fl <= _this.clickFingers[1]) return true;
-          } else {
-            if (_this.clickHands[0] <= hl && hl <= _this.clickHands[1] && _this.clickFingers == fl) return true;
-          };
-        } else {
-          if (_this.clickFingers instanceof Array) {
-            if (_this.clickHands == hl && _this.clickFingers[0] <= fl && fl <= _this.clickFingers[1]) return true;
-          } else {
-            if (_this.clickHands == hl && _this.clickFingers == fl) return true;
-          };
-        };
     };
 
     return false;
@@ -204,12 +176,6 @@ THREE.LeapObjectControls = function(camera, object) {
             } else {
               return lh;
             };
-          case 'click':
-            if (_this.clickRighHanded) {
-              return rh;
-            } else {
-              return lh;
-            };
         };
       };
     };
@@ -238,12 +204,6 @@ THREE.LeapObjectControls = function(camera, object) {
         return (_this.panHandPosition
           ? (_this.panStabilized ? h.stabilizedPalmPosition : h.palmPosition) 
           : (_this.panStabilized ? frame.pointables[0].stabilizedTipPosition : frame.pointables[0].tipPosition)
-        );
-      case 'click':
-        h = _this.hand(frame, 'click');
-        return (_this.clickHandPosition
-          ? (_this.clickStabilized ? h.stabilizedPalmPosition : h.palmPosition) 
-          : (_this.clickStabilized ? frame.pointables[0].stabilizedTipPosition : frame.pointables[0].tipPosition)
         );
     };
   };
@@ -336,26 +296,6 @@ THREE.LeapObjectControls = function(camera, object) {
       _panZLast = null;     
     };
   };
-
-  // Need to work on!!!!!
-  this.clickObject = function (frame) {
-    if (_this.clickEnabled && _this.applyGesture(frame, 'click')) {
-      var z = _this.position(frame, 'click')[2];
-      if (!_clickZLast) _clickZLast = z;
-      var zDelta = z - _clickZLast;
-
-      _this.object.click.z += _this.clickTransform(zDelta/4);
-
-      _clickZLast  = z;
-      _rotateXLast = null;
-      _rotateYLast = null;
-      _panXLast    = null;
-      _panYLast    = null;
-      _panZLast    = null;
-    } else {
-      _clickZLast  = null; 
-    };
-  }:
 
   this.update = function(frame) {
     if (_this.enabled) {

@@ -1,12 +1,26 @@
 body {
-  font-family: 'Fauna One', serif;
+  font-family: 'Special Elite', cursive;
   font-size: 12px;
   cursor: none;
 }
 
-h3 {font-weight: normal;}
+h3 {font-weight: normal; font-size: 25px;}
+
+h4 {font-size: 15px; margin-top: -10px;}
 
 a {color: #ff0000;}
+
+#footer {
+  font-size: 10px;
+  line-height: 0.5;
+  display: block;
+  position:absolute;
+  bottom:0;
+  width:100%;
+  text-align: center;
+  overflow: hidden;
+  z-index: 2;
+}
 
 #info {
   position: absolute;

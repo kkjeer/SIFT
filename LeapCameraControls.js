@@ -31,7 +31,7 @@ THREE.LeapCameraControls = function(camera) {
   this.rotateHandPosition  = true;
   this.rotateStabilized    = false;
   this.rotateMin           = 0;
-  this.rotateMax           = Math.PI;
+  this.rotateMax           = Math.PI/2;
   
   // zoom
   this.zoomEnabled         = true;
