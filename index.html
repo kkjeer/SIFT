@@ -90,8 +90,11 @@
         scene.add(coords);
 
         // **********REPLACE this part with the BOOKS and add book shelf***********
+        var shelf = new Shelf(400, 100, 70);
+        scene.add(shelf.frame);
+        shelf.addBooks(10, scene, objects, objectsControls);
         // cubes 
-        for (var i = 0; i < 20; i ++) {
+        for (var i = 0; i < 0; i ++) {
           // var geometry = new THREE.CubeGeometry(Math.random()*60, Math.random()*60, Math.random()*60);
           // var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xefefef}));
           var book = new Book(60, 80, 20, Math.random() * 0xffffff, 'book' + i);
