@@ -266,6 +266,27 @@
     // });
     //   };
 
+    function emptyShelfSwipe(frame) {
+      frame.gestures.forEach(function(gesture){
+        switch (gesture.type){
+          case "circle":
+              console.log("Circle Gesture");
+              break;
+          case "keyTap":
+              console.log("Key Tap Gesture");
+              break;
+          case "screenTap":
+              console.log("Screen Tap Gesture");
+              break;
+          case "swipe":
+              console.log("Swipe Gesture");
+              break;
+        }
+      if (frame.hands.length > 0 && hand.fingers.length =>4) {
+        Shelf.clearBooks();
+      }
+    };
+
 
       function render() {
         requestAnimationFrame(render); //temporary - for testing without the LeapMotion
