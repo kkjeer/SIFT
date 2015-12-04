@@ -52,8 +52,8 @@
         cameraControls.rotateSpeed    = 3;
         cameraControls.rotateHands    = 1;
         cameraControls.rotateFingers  = [2, 3];
-        cameraControls.rotateMin      = 0;
-        cameraControls.rotateMax      = Math.PI/10;
+        cameraControls.rotateMin      = Math.PI/4;
+        cameraControls.rotateMax      = (3*Math.PI)/4;
         
         cameraControls.zoomEnabled    = true;
         cameraControls.zoomSpeed      = 6;
@@ -226,46 +226,51 @@
         return -2;
       };
 
-      function pullBooksPinch(hand) {
-        if (hand.pinchStrength.toPrecision(2) > 0.7) {
+    //   function pullOutBookPinch(frame) {
+    //     if(frame.hands.length > 0) {
+    //       var hand = frame.hands[0];
 
-        }
+    //       if (hand.pinchStrength > 0.7) {
+    //         if (controlsIndex > -1) {
+    //         Shelf.books[controlsIndex].pullOut(); //not sure if this works 
+    //       }
+    //     }
+    //   }
+    //   };
 
-      }
-
-      function clickObject(frame) {
-        //checks for click on object
-        frame.gestures.forEach(function(gesture){
-        switch (gesture.type){
-          case "circle":
-              console.log("Circle Gesture");
-              break;
-          case "keyTap":
-              console.log("Key Tap Gesture");
-              break;
-          case "screenTap":
-              console.log("Screen Tap Gesture");
-              break;
-          case "swipe":
-              console.log("Swipe Gesture");
-              break;
-        }
-        // if the gesture is a circle or keyTap or screenTap, it is registered as a click on an object
-        if (gesture.type == "circle" || gesture.type == "keyTap" || gesture.type == "screenTap") {
-          console.log("clicked!");
-          if (controlsIndex > -1) {
-            //objects[controlsIndex].material.color.setHex(0x38f000);
-            Book.prototype.highlight();
-          }
-        }
-    });
-      }
+    //   function clickBook(frame) {
+    //     //checks for click on object
+    //     frame.gestures.forEach(function(gesture){
+    //     switch (gesture.type){
+    //       case "circle":
+    //           console.log("Circle Gesture");
+    //           break;
+    //       case "keyTap":
+    //           console.log("Key Tap Gesture");
+    //           break;
+    //       case "screenTap":
+    //           console.log("Screen Tap Gesture");
+    //           break;
+    //       case "swipe":
+    //           console.log("Swipe Gesture");
+    //           break;
+    //     }
+    //     // if the gesture is a circle or keyTap or screenTap, it is registered as a click on an object
+    //     if (gesture.type == "circle" || gesture.type == "keyTap" || gesture.type == "screenTap") {
+    //       console.log("clicked!");
+    //       if (controlsIndex > -1) {
+    //         //objects[controlsIndex].material.color.setHex(0x38f000);
+    //         Shelf.books[controlsIndex].highlight(); //not sure if this works 
+    //       }
+    //     }
+    // });
+    //   };
 
 
       function render() {
         requestAnimationFrame(render); //temporary - for testing without the LeapMotion
         renderer.render(scene, camera);
-        //TWEEN.update();
+        TWEEN.update();
       };
 
       function onWindowResize() {
@@ -291,7 +296,10 @@
             objectsControls[index].update(frame);
           };
 
-          clickObject(frame);
+
+         // clickBook(frame);
+
+         // pullOutBookPinch(frame);
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;
