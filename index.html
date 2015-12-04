@@ -232,7 +232,7 @@
 
     //       if (hand.pinchStrength > 0.7) {
     //         if (controlsIndex > -1) {
-    //         Shelf.books[controlsIndex].pullOut(); //not sure if this works 
+    //         shelf.books[controlsIndex].pullOut(); //not sure if this works 
     //       }
     //     }
     //   }
@@ -260,32 +260,32 @@
     //       console.log("clicked!");
     //       if (controlsIndex > -1) {
     //         //objects[controlsIndex].material.color.setHex(0x38f000);
-    //         Shelf.books[controlsIndex].highlight(); //not sure if this works 
+    //         shelf.books[controlsIndex].highlight(); //not sure if this works 
     //       }
     //     }
     // });
     //   };
 
-    function emptyShelfSwipe(frame) {
-      frame.gestures.forEach(function(gesture){
-        switch (gesture.type){
-          case "circle":
-              console.log("Circle Gesture");
-              break;
-          case "keyTap":
-              console.log("Key Tap Gesture");
-              break;
-          case "screenTap":
-              console.log("Screen Tap Gesture");
-              break;
-          case "swipe":
-              console.log("Swipe Gesture");
-              break;
-        }
-      if (frame.hands.length > 0 && hand.fingers.length =>4) {
-        Shelf.clearBooks();
-      }
-    };
+    // function emptyShelfSwipe(frame) {
+    //   frame.gestures.forEach(function(gesture){
+    //     switch (gesture.type){
+    //       case "circle":
+    //           console.log("Circle Gesture");
+    //           break;
+    //       case "keyTap":
+    //           console.log("Key Tap Gesture");
+    //           break;
+    //       case "screenTap":
+    //           console.log("Screen Tap Gesture");
+    //           break;
+    //       case "swipe":
+    //           console.log("Swipe Gesture");
+    //           break;
+    //     }
+    //   if (frame.hands.length > 0 && hand.fingers.length =>4) {
+    //     shelf.clearBooks();
+    //   }
+    // };
 
 
       function render() {
@@ -321,6 +321,8 @@
          // clickBook(frame);
 
          // pullOutBookPinch(frame);
+
+         // emptyShelfSwipe(frame);
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;
