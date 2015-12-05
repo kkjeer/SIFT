@@ -88,7 +88,7 @@ Book.prototype.fall = function (shelfEdgePos, rotationSign) {
 //z-axis by 0.5 * this.depth in each direction
 Book.prototype.addInnerFrame = function () {
 	this.innerFrame = new THREE.Object3D();
-	this.innerFrame.name = this.name + 'InnnerFrame';
+	this.innerFrame.name = this.name + '#InnnerFrame';
 
 	var front = this.makeFrontCover();
 	front.position.set(0, 0, 0.5 * this.depth);
@@ -111,12 +111,12 @@ Book.prototype.addInnerFrame = function () {
 //extends along x and y axes
 Book.prototype.makeFrontCover = function () {
 	var frontCoverFrame = new THREE.Object3D();
-	frontCoverFrame.name = this.name + 'FrontCoverFrame';
+	frontCoverFrame.name = this.name + '#FrontCoverFrame';
 
 	var frontGeom = new THREE.PlaneGeometry(this.width, this.height);
 	var frontMat = new THREE.MeshPhongMaterial({color: this.color, ambient: this.color, side: THREE.DoubleSide});
 	this.front = new THREE.Mesh(frontGeom, frontMat);
-	this.front.name = this.name + 'FrontCoverMesh';
+	this.front.name = this.name + '#FrontCoverMesh';
 
 	this.front.position.set(0.5 * this.width, 0, 0);
 	frontCoverFrame.add(this.front);
@@ -128,12 +128,12 @@ Book.prototype.makeFrontCover = function () {
 //extends along x and y axes
 Book.prototype.makeBackCover = function () {
 	var backCoverFrame = new THREE.Object3D();
-	backCoverFrame.name = this.name + 'BackCoverFrame';
+	backCoverFrame.name = this.name + '#BackCoverFrame';
 
 	var backGeom = new THREE.PlaneGeometry(this.width, this.height);
 	var backMat = new THREE.MeshPhongMaterial({color: this.color, ambient: this.color, side: THREE.DoubleSide});
 	this.back = new THREE.Mesh(backGeom, backMat);
-	this.back.name = this.name + 'BackCoverMesh';
+	this.back.name = this.name + '#BackCoverMesh';
 
 	this.back.position.set(0.5 * this.width, 0, 0);
 	backCoverFrame.add(this.back);
@@ -146,7 +146,7 @@ Book.prototype.makeBackCover = function () {
 Book.prototype.makeSpine = function () {
 	this.spineCurvature = 0.75 * this.depth;
 	var spineFrame = new THREE.Object3D();
-	spineFrame.name = this.name + 'SpineFrame';
+	spineFrame.name = this.name + '#SpineFrame';
 
 	var spinePoints = [
 		[
@@ -177,7 +177,7 @@ Book.prototype.makeSpine = function () {
 	var spineGeom = new THREE.BezierSurfaceGeometry(spinePoints, 20, 20);
 	var spineMat = new THREE.MeshPhongMaterial({color: this.color, ambient: this.color, side: THREE.DoubleSide});
 	this.spine = new THREE.Mesh(spineGeom, spineMat);
-	this.spine.name = this.name + 'SpineMesh';
+	this.spine.name = this.name + '#SpineMesh';
 
 	this.spine.position.set(-0.5 * this.depth, -0.5 * this.height, 0);
 	spineFrame.add(this.spine);
@@ -200,12 +200,12 @@ Book.prototype.addPages = function () {
 //extends along x and y axes
 Book.prototype.makePage = function () {
 	var pageFrame = new THREE.Object3D();
-	pageFrame.name = this.name + 'PageFrame';
+	pageFrame.name = this.name + '#PageFrame';
 
 	var pageGeom = new THREE.CubeGeometry(this.pageWidth, this.height, 0.005 * this.depth);
 	var pageMat = new THREE.MeshPhongMaterial({color: this.pageColor, ambient: this.pageColor});
 	var page = new THREE.Mesh(pageGeom, pageMat);
-	page.name = this.name + 'PageMesh';
+	page.name = this.name + '#PageMesh';
 
 	page.position.set(0.5 * this.pageWidth, 0, 0);
 	pageFrame.add(page);
