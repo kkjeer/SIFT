@@ -28,6 +28,8 @@ Shelf.prototype.makeFlatShelf = function () {
 
 	var flatGeom = new THREE.CubeGeometry(this.flatWidth, this.flatThickness, this.depth);
 	var flatMat = new THREE.MeshPhongMaterial({color: this.color, ambient: this.color});
+	//textured wood material - only if running on a server, cross-origin prevents running locally
+	//flatMat = textureMaterial('wood');
 	var flat = new THREE.Mesh(flatGeom, flatMat);
 	flat.name = this.name + 'FlatMesh';
 
@@ -38,7 +40,10 @@ Shelf.prototype.makeFlatShelf = function () {
 
 Shelf.prototype.clearBooks = function () {
 	for (var i in this.books) {
-		this.book.fall();
+		var edgePos = new THREE.Vector3().copy(this.books[i].frame.position);
+		edgePos.x -= i * this.bookSpacing;
+		edgePos.z += this.depth;
+		this.books[i].fall(edgePos);
 	}
 	this.books = [];
 }
@@ -46,10 +51,11 @@ Shelf.prototype.clearBooks = function () {
 Shelf.prototype.addBook = function (scene, objects, objectsControls) {
 	var shelfPos = this.frame.position;
 	var bookWidth = this.depth;
-	var bookHeight = (Math.random() * 3 + 4) * this.flatThickness;
+	var bookHeight = randomInRange(1.25 * bookWidth, 2.0 * bookWidth);
 	var bookDepth = this.width/this.numBooks;
 	var bookSpacing = 0.3 * bookDepth;
-	var book = new Book(bookWidth, bookHeight, (Math.random() * 0.5 + 0.5) * (bookDepth - bookSpacing), Math.random() * 0xffffff, 'book' + this.books.length);
+	this.bookSpacing = bookSpacing;
+	var book = new Book(bookWidth, bookHeight, randomInRange(0.5, 1) * (bookDepth - bookSpacing), Math.random() * 0xffffff, 'book' + this.books.length);
 	var object = book.frame;
 	object.position.copy(shelfPos);
 	object.position.x -= 0.5 * this.width;
