@@ -221,7 +221,8 @@ Book.prototype.highlight = function () {
 }
 
 Book.prototype.unhighlight = function () {
-	this.front.material.emissive.setHex(this.color);
-	this.back.material.emissive.setHex(this.color);
-	this.spine.material.emissive.setHex(this.color);
+	this.unhighlightColor = 0x000000;
+	this.front.material.emissive.setHex(this.unhighlightColor);
+	this.back.material.emissive.setHex(this.unhighlightColor);
+	this.spine.material.emissive.setHex(this.unhighlightColor);
 }
