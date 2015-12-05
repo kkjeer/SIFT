@@ -41,9 +41,11 @@ Shelf.prototype.makeFlatShelf = function () {
 Shelf.prototype.clearBooks = function () {
 	for (var i in this.books) {
 		var edgePos = new THREE.Vector3().copy(this.books[i].frame.position);
-		edgePos.x -= i * this.bookSpacing;
+		var bookXSign = edgePos.x == 0 ? 0 : edgePos.x/Math.abs(edgePos.x);
+		//edgePos.x += bookXSign * i * this.bookSpacing;
 		edgePos.z += this.depth;
-		this.books[i].fall(edgePos);
+		var sign = i % 2 == 0 ? 1 : -1;
+		this.books[i].fall(edgePos, sign);
 	}
 	this.books = [];
 }

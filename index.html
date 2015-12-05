@@ -98,7 +98,7 @@
         shelf.frame.position.y = 100;
         scene.add(shelf.frame);
         shelf.addBooks(10, scene, objects, objectsControls);
-        shelf.clearBooks();
+        //shelf.clearBooks();
         // cubes 
         for (var i = 0; i < 0; i ++) {
           // var geometry = new THREE.CubeGeometry(Math.random()*60, Math.random()*60, Math.random()*60);
@@ -292,7 +292,7 @@
 
 
       function render() {
-        requestAnimationFrame(render); //temporary - for testing without the LeapMotion
+        //requestAnimationFrame(render); //temporary - for testing without the LeapMotion
         renderer.render(scene, camera);
         TWEEN.update();
       };
