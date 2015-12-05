@@ -166,10 +166,10 @@
           if (index != controlsIndex && controlsIndex > -2) {
             // new object or camera to control
             if (controlsIndex > -2) {
-              if (index > -1) console.log(index); //shelf.books[index].unhighlight();
+              if (index > -1) shelf.books[index].unhighlight();
               index = controlsIndex;
               //if (index > -1) objects[index].material.color.setHex(0xff0000);
-              if (index > -1) console.log(index); //shelf.books[index].highlight();
+              if (index > -1) shelf.books[index].highlight();
               //if (index > -1) shelf.books[index].highlight();
             }
           };
@@ -230,6 +230,8 @@
             var intersected = intersects[i];
             console.log(intersected.object.name);
             //return scene.children.indexOf(intersected.object.name);
+            var numdigits = intersected.object.name.indexOf("#");
+            return intersected.object.name.substring(4,numdigits);
           } else {
             return -1;
           };
@@ -334,7 +336,9 @@
           if (index == -1) {
             cameraControls.update(frame);
           } else {
-            objectsControls[index].update(frame);
+            if(objectsControls[index]){
+              objectsControls[index].update(frame);
+            }
           };
 
 
