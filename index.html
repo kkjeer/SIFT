@@ -42,7 +42,7 @@
         // camera
         camera = new THREE.PerspectiveCamera(25, $(window).width()/$(window).height(), 0.1, 10000);
         camera.position.x = 500;
-        camera.position.y = 500;
+        camera.position.y = 900;
         camera.position.z = 500;
         var origin = new THREE.Vector3(0, 0, 0);
         camera.lookAt(origin);
@@ -100,6 +100,8 @@
         scene.add(shelf.frame);
         shelf.addBooks(10, scene, objects, objectsControls);
         //shelf.clearBooks();
+        //shelf.books[3].highlight();
+        //shelf.books[3].unhighlight();
         // cubes 
         for (var i = 0; i < 0; i ++) {
           // var geometry = new THREE.CubeGeometry(Math.random()*60, Math.random()*60, Math.random()*60);
@@ -160,13 +162,14 @@
       
       function changeControlsIndex() {
         if (lastControlsIndex == controlsIndex) {
+          console.log(controlsIndex);
           if (index != controlsIndex && controlsIndex > -2) {
             // new object or camera to control
             if (controlsIndex > -2) {
-              if (index > -1) shelf.books[index].unhighlight();
+              if (index > -1) console.log(index); //shelf.books[index].unhighlight();
               index = controlsIndex;
               //if (index > -1) objects[index].material.color.setHex(0xff0000);
-              if (index > -1) shelf.books[index].highlight();
+              if (index > -1) console.log(index); //shelf.books[index].highlight();
               //if (index > -1) shelf.books[index].highlight();
             }
           };
@@ -218,12 +221,15 @@
           var vector = new THREE.Vector3(vpx, vpy, 0.5);
           projector.unprojectVector(vector, camera);
           var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-          var intersects = raycaster.intersectObjects(objects);
+          //var intersects = raycaster.intersectObjects(objects);
+          var intersects = raycaster.intersectObjects(scene.children, true);
+          //console.log(intersects);
           if (intersects.length > 0) { 
             var i = 0;
             while(!intersects[i].object.visible) i++;
             var intersected = intersects[i];
-            return objects.indexOf(intersected.object);
+            console.log(intersected.object.name);
+            //return scene.children.indexOf(intersected.object.name);
           } else {
             return -1;
           };
