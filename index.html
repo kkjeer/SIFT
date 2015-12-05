@@ -24,6 +24,7 @@
       var objects = [], objectsControls = [], cameraControls;
       var coords1, coords2, coords3;
       var lastControlsIndex = -1, controlsIndex = -1, index = -1;
+      var shelf;
 
       function init() {
         // is webgl supported?
@@ -49,14 +50,14 @@
         // leap camera controls
         cameraControls = new THREE.LeapCameraControls(camera);
 
-        cameraControls.rotateEnabled  = true;
+        cameraControls.rotateEnabled  = false;
         cameraControls.rotateSpeed    = 3;
         cameraControls.rotateHands    = 1;
-        cameraControls.rotateFingers  = [2, 3];
+        cameraControls.rotateFingers  = [1, 2];
         // cameraControls.rotateMin      = ;
         // cameraControls.rotateMax      = ;
         
-        cameraControls.zoomEnabled    = true;
+        cameraControls.zoomEnabled    = false;
         cameraControls.zoomSpeed      = 6;
         cameraControls.zoomHands      = 1;
         cameraControls.zoomFingers    = [4, 5];
@@ -94,11 +95,11 @@
         scene.add(coords);
 
         // **********REPLACE this part with the BOOKS and add book shelf***********
-        var shelf = new Shelf(400, 50, 70);
+        shelf = new Shelf(400, 50, 70);
         shelf.frame.position.y = 100;
         scene.add(shelf.frame);
         shelf.addBooks(10, scene, objects, objectsControls);
-        shelf.clearBooks();
+        //shelf.clearBooks();
         // cubes 
         for (var i = 0; i < 0; i ++) {
           // var geometry = new THREE.CubeGeometry(Math.random()*60, Math.random()*60, Math.random()*60);
@@ -162,10 +163,11 @@
           if (index != controlsIndex && controlsIndex > -2) {
             // new object or camera to control
             if (controlsIndex > -2) {
-              if (index > -1) objects[index].material.color.setHex(0xefefef);
+              if (index > -1) shelf.books[index].unhighlight();
               index = controlsIndex;
-              if (index > -1) objects[index].material.color.setHex(0xff0000);
-             // if (index > -1) shelf.books[index].highlight();
+              //if (index > -1) objects[index].material.color.setHex(0xff0000);
+              if (index > -1) shelf.books[index].highlight();
+              //if (index > -1) shelf.books[index].highlight();
             }
           };
         }; 
@@ -230,73 +232,78 @@
         return -2;
       };
 
-    //   function pullOutBookPinch(frame) {
-    //     if(frame.hands.length > 0) {
-    //       var hand = frame.hands[0];
+      function pullOutBookPinch(frame, shelf) {
+        if(frame.hands.length > 0) {
+          var hand = frame.hands[0];
 
-    //       if (hand.pinchStrength > 0.7) {
-    //         if (controlsIndex > -1) {
-    //         shelf.books[controlsIndex].pullOut(); //not sure if this works
-    //       }
-    //     }
-    //   }
-    //   };
+          if (hand.pinchStrength > 0.7) {
+            if (controlsIndex > -1) {
+            shelf.books[controlsIndex].pullOut(); //not sure if this works
+          }
+        }
+      }
+      };
 
-    //   function clickBook(frame) {
-    //     //checks for click on object
-    //     frame.gestures.forEach(function(gesture){
-    //     switch (gesture.type){
-    //       case "circle":
-    //           console.log("Circle Gesture");
-    //           break;
-    //       case "keyTap":
-    //           console.log("Key Tap Gesture");
-    //           break;
-    //       case "screenTap":
-    //           console.log("Screen Tap Gesture");
-    //           break;
-    //       case "swipe":
-    //           console.log("Swipe Gesture");
-    //           break;
-    //     }
-    //     // if the gesture is a circle or keyTap or screenTap, it is registered as a click on an object
-    //     if (gesture.type == "circle" || gesture.type == "keyTap" || gesture.type == "screenTap") {
-    //       console.log("clicked!");
-    //       if (controlsIndex > -1) {
-    //         //objects[controlsIndex].material.color.setHex(0x38f000);
-    //         shelf.books[controlsIndex].highlight(); //not sure if this works 
-    //       }
-    //     }
-    // });
-    //   };
+      function clickBook(frame,shelf) {
+        //checks for click on object
+        frame.gestures.forEach(function(gesture){
+        switch (gesture.type){
+          case "circle":
+              console.log("Circle Gesture");
+              break;
+          case "keyTap":
+              console.log("Key Tap Gesture");
+              break;
+          case "screenTap":
+              console.log("Screen Tap Gesture");
+              break;
+          case "swipe":
+              console.log("Swipe Gesture");
+              break;
+        }
+        // if the gesture is a circle or keyTap or screenTap, it is registered as a click on an object
+        if (gesture.type == "circle" || gesture.type == "keyTap" || gesture.type == "screenTap") {
+          console.log("clicked!");
+          if (controlsIndex > -1) {
+            //objects[controlsIndex].material.color.setHex(0x38f000);
+            shelf.books[controlsIndex].highlight(); //not sure if this works 
+          }
+        }
+    });
+      };
 
-    // function emptyShelfSwipe(frame) {
-    //   frame.gestures.forEach(function(gesture){
-    //     switch (gesture.type){
-    //       case "circle":
-    //           console.log("Circle Gesture");
-    //           break;
-    //       case "keyTap":
-    //           console.log("Key Tap Gesture");
-    //           break;
-    //       case "screenTap":
-    //           console.log("Screen Tap Gesture");
-    //           break;
-    //       case "swipe":
-    //           console.log("Swipe Gesture");
-    //           break;
-    //     }
-    //   if (gesture.type == "swipe") {
-    //    if (frame.hands.length > 0 && hand.fingers.length =>4) {
-    //     console.log("swipe to clear books");
-    //     shelf.clearBooks();
-    //   }
-    //   }
-    // };
+    function emptyShelfSwipe(frame, shelf) {
+      if(frame.hands.length > 0) {
+          var hand = frame.hands[0];
+
+
+      frame.gestures.forEach(function(gesture){
+        switch (gesture.type){
+          case "circle":
+              console.log("Circle Gesture");
+              break;
+          case "keyTap":
+              console.log("Key Tap Gesture");
+              break;
+          case "screenTap":
+              console.log("Screen Tap Gesture");
+              break;
+          case "swipe":
+              console.log("Swipe Gesture");
+              break;
+        }
+      if (gesture.type == "swipe") {
+        console.log(hand.fingers.length);
+        console.log("swipe to clear books");
+        shelf.clearBooks();
+    }
+    });
+    } //closing frame.hands.length check
+    };
 
 
       function render() {
-        requestAnimationFrame(render); //temporary - for testing without the LeapMotion
+        //requestAnimationFrame(render); //temporary - for testing without the LeapMotion
         renderer.render(scene, camera);
         TWEEN.update();
       };
@@ -325,11 +332,11 @@
           };
 
 
-         // clickBook(frame);
+         clickBook(frame,shelf);
 
-         // pullOutBookPinch(frame);
+         pullOutBookPinch(frame,shelf);
 
-         // emptyShelfSwipe(frame);
+         emptyShelfSwipe(frame,shelf);
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;
@@ -342,7 +349,7 @@
         });
 
         // detect controls change
-        setInterval(changeControlsIndex, 250);
+        setInterval(changeControlsIndex, 100);
 
       });
       
