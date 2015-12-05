@@ -15,6 +15,7 @@
     <script type="text/javascript" src="js/leap.min.js"></script>
     <script type="text/javascript" src="LeapCameraControls.js"></script>
     <script type="text/javascript" src="LeapObjectControls.js"></script>
+    <script type="text/javascript" src="graphicsFunctions.js"></script>
     <script type="text/javascript" src="BezierSurfaceGeometry.js"></script>
     <script type="text/javascript" src="Book.js"></script>
     <script type="text/javascript" src="Shelf.js"></script>
@@ -93,9 +94,11 @@
         scene.add(coords);
 
         // **********REPLACE this part with the BOOKS and add book shelf***********
-        var shelf = new Shelf(400, 100, 70);
+        var shelf = new Shelf(400, 50, 70);
+        shelf.frame.position.y = 100;
         scene.add(shelf.frame);
         shelf.addBooks(10, scene, objects, objectsControls);
+        shelf.clearBooks();
         // cubes 
         for (var i = 0; i < 0; i ++) {
           // var geometry = new THREE.CubeGeometry(Math.random()*60, Math.random()*60, Math.random()*60);

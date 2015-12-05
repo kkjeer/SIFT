@@ -12,7 +12,8 @@ function Book (width, height, depth, color, name) {
 	this.inOutTime = 700;
 
 	//animation properties: falling to the floor
-	this.mass = 0.5 * this.height * this.width * this.depth;
+	this.mass = 0.005 * this.height * this.width * this.depth;
+	this.speed = 50000/this.mass;
 
 	//page properties
 	this.pageColor = 0xffefdb;
@@ -49,8 +50,32 @@ Book.prototype.pushIn = function () {
 	}).start();
 }
 
-Book.prototype.fall = function () {
+Book.prototype.fall = function (shelfEdgePos) {
+	var book = this;
 
+	book.edgeXRotation = randomInRange(-0.002, 0.002);
+	var edgeTime = 1000 * new THREE.Vector3().subVectors(book.frame.position, shelfEdgePos).length()/book.speed;
+	book.toEdgeTween = new TWEEN.Tween(book.frame.position).to(shelfEdgePos, edgeTime).onUpdate(function () {
+		book.frame.rotateX(book.edgeXRotation);
+	});
+
+	var floorPos = new THREE.Vector3().copy(shelfEdgePos);
+	floorPos.x *= randomInRange(1.5, 2);
+	floorPos.y -= floorPos.y;
+	floorPos.z *= randomInRange(1.5, 2);
+	var floorTime = 1000 * new THREE.Vector3().subVectors(book.frame.position, shelfEdgePos).length()/book.speed;
+
+	book.floorXRotation = randomInRange(-Math.PI/2, Math.PI/2);
+	book.floorZRotation = randomInRange(-Math.PI/6, Math.PI/6);
+	
+	book.toFloorTween = new TWEEN.Tween(book.frame.position).to(floorPos, floorTime).onUpdate(function () {
+		book.frame.rotateX(30 * book.floorXRotation/floorTime);
+		book.frame.rotateZ(20 * book.floorXRotation/floorTime);
+	});
+
+	book.toEdgeTween.onComplete(function () {
+		book.toFloorTween.start();
+	}).start();
 }
 
 //origin: center of left edge
@@ -160,7 +185,7 @@ Book.prototype.addPages = function () {
 	var pageFrame = this.makePage();
 	var pageDistance = this.depth/this.numPages;
 
-	for (var i = 0; i < this.numPages; i++) {
+	for (var i = 1; i < this.numPages; i++) {
 		var page = pageFrame.clone();
 		page.position.set(0, 0, i * pageDistance - 0.5 * this.depth);
 		this.innerFrame.add(page);
