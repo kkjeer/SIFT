@@ -12,7 +12,7 @@ function Book (width, height, depth, color, name) {
 	this.inOutTime = 700;
 
 	//animation properties: falling to the floor
-	this.mass = 0.005 * this.height * this.width * this.depth;
+	this.mass = 0.004 * this.height * this.width * this.depth;
 	this.speed = 50000/this.mass;
 
 	//page properties
@@ -50,29 +50,33 @@ Book.prototype.pushIn = function () {
 	}).start();
 }
 
-Book.prototype.fall = function (shelfEdgePos) {
+Book.prototype.fall = function (shelfEdgePos, rotationSign) {
 	var book = this;
 
-	book.edgeXRotation = randomInRange(-0.002, 0.002);
+	//tween to move the book to the edge of the shelf
 	var edgeTime = 1000 * new THREE.Vector3().subVectors(book.frame.position, shelfEdgePos).length()/book.speed;
-	book.toEdgeTween = new TWEEN.Tween(book.frame.position).to(shelfEdgePos, edgeTime).onUpdate(function () {
-		book.frame.rotateX(book.edgeXRotation);
-	});
+	book.toEdgeTween = new TWEEN.Tween(book.frame.position).to(shelfEdgePos, edgeTime);
 
+	//determine the position on the floor that the book falls to
 	var floorPos = new THREE.Vector3().copy(shelfEdgePos);
-	floorPos.x *= randomInRange(1.5, 2);
+	floorPos.x *= randomInRange(1.0, 1.5);
 	floorPos.y -= floorPos.y;
-	floorPos.z *= randomInRange(1.5, 2);
+	floorPos.z *= rotationSign == 1 ? randomInRange(1.8, 2.0) : randomInRange(1.0, 1.2);
 	var floorTime = 1000 * new THREE.Vector3().subVectors(book.frame.position, shelfEdgePos).length()/book.speed;
 
-	book.floorXRotation = randomInRange(-Math.PI/2, Math.PI/2);
-	book.floorZRotation = randomInRange(-Math.PI/6, Math.PI/6);
+	//define rotation ranges while falling to the floor
+	book.floorXRotation = randomInRange(-Math.PI/4, Math.PI/4);
+	book.floorYRotation = randomInRange(-Math.PI/2, Math.PI/2);
+	book.floorZRotation = randomInRange(-Math.PI/3, Math.PI/3);
 	
+	//tween to move the book to the floor
 	book.toFloorTween = new TWEEN.Tween(book.frame.position).to(floorPos, floorTime).onUpdate(function () {
-		book.frame.rotateX(30 * book.floorXRotation/floorTime);
+		book.frame.rotateX(20 * book.floorXRotation/floorTime);
+		book.frame.rotateY(20 * book.floorYRotation/floorTime);
 		book.frame.rotateZ(20 * book.floorXRotation/floorTime);
 	});
 
+	//first move the book to the edge, then move it to the floor
 	book.toEdgeTween.onComplete(function () {
 		book.toFloorTween.start();
 	}).start();
@@ -214,4 +218,10 @@ Book.prototype.highlight = function () {
 	this.front.material.emissive.setHex(this.highlightColor);
 	this.back.material.emissive.setHex(this.highlightColor);
 	this.spine.material.emissive.setHex(this.highlightColor);
+}
+
+Book.prototype.unhighlight = function () {
+	this.front.material.emissive.setHex(this.color);
+	this.back.material.emissive.setHex(this.color);
+	this.spine.material.emissive.setHex(this.color);
 }
