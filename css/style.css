@@ -51,6 +51,7 @@ canvas {
   display: block;
   margin: auto;
   width: 100%;
+  pointer-events: none;
 }
 
 #cursor {
@@ -69,7 +70,7 @@ canvas {
 
 
 
-label {
+#label {
 position: fixed;
 white-space: nowrap;
 }

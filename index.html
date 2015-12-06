@@ -202,7 +202,7 @@
         var hl = frame.hands.length;
         var fl = frame.pointables.length;
 
-        if (hl == 1 && fl == 1) {
+        if (hl == 1 && fl == 5) {
           var f = frame.pointables[0];
           var cont = $(renderer.domElement);
           var offset = cont.offset();
@@ -218,8 +218,9 @@
       function focusObject(frame) {
         var hl = frame.hands.length;
         var fl = frame.pointables.length;
-
-        if (hl == 1 && fl == 1) {
+        console.log("hl:"+hl+"& fl:" +fl);
+        if (hl == 1 && fl == 5) {
+          console.log("entered if of focusObject");
           var f = frame.pointables[0];
           var cont = $(renderer.domElement);
           var coords = transform(f.tipPosition, cont.width(), cont.height());
@@ -228,9 +229,11 @@
           var vector = new THREE.Vector3(vpx, vpy, 0.5);
           projector.unprojectVector(vector, camera);
           var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-          //var intersects = raycaster.intersectObjects(objects);
-          var intersects = raycaster.intersectObjects(scene.children, true);
-          //console.log(intersects);
+          var intersects = raycaster.intersectObjects(objects);
+          //var intersects = raycaster.intersectObjects(scene.children, true);
+          console.log(raycaster != null);
+
+          console.log("intersects:" + intersects.length);
           if (intersects.length > 0) { 
             var i = 0;
             while(!intersects[i].object.visible) i++;
@@ -256,8 +259,8 @@
       function pullOutBookPinch(frame) {
         if(frame.hands.length > 0) {
           var hand = frame.hands[0];
-          console.log(hand.pinchStrength > 0);
-          if (hand.pinchStrength > 0.7) {
+        //  console.log(hand.pinchStrength > 0);
+          if (hand.pinchStrength > 0.85) {
             if (index > -1) {
             shelf.books[index].pullOut(); //not sure if this works
           }
@@ -270,13 +273,13 @@
         frame.gestures.forEach(function(gesture){
         switch (gesture.type){
           case "circle":
-              console.log("Circle Gesture");
+              //console.log("Circle Gesture");
               break;
           case "keyTap":
-              console.log("Key Tap Gesture");
+              //console.log("Key Tap Gesture");
               break;
           case "screenTap":
-              console.log("Screen Tap Gesture");
+              //console.log("Screen Tap Gesture");
               break;
           case "swipe":
               console.log("Swipe Gesture");
@@ -284,7 +287,7 @@
         }
         // if the gesture is a circle or keyTap or screenTap, it is registered as a click on an object
         if (gesture.type == "circle" || gesture.type == "keyTap" || gesture.type == "screenTap") {
-          console.log("clicked!");
+          //console.log("clicked!");
           if (index > -1) {
             //objects[controlsIndex].material.color.setHex(0x38f000);
             shelf.books[index].highlight(); 
@@ -301,13 +304,13 @@
       frame.gestures.forEach(function(gesture){
         switch (gesture.type){
           case "circle":
-              console.log("Circle Gesture");
+              //console.log("Circle Gesture");
               break;
           case "keyTap":
-              console.log("Key Tap Gesture");
+              //console.log("Key Tap Gesture");
               break;
           case "screenTap":
-              console.log("Screen Tap Gesture");
+              //console.log("Screen Tap Gesture");
               break;
           case "swipe":
               console.log("Swipe Gesture");
@@ -383,12 +386,12 @@
             
         function(frame) {
 
-          console.log(frame.pointables.length);
+         // console.log(frame.pointables.length);
           // show cursor
           showCursor(frame);
 
           //test to see if pinch strength is readable
-          if(frame.hands[0]) console.log(frame.hands[0].pinchStrength);
+         // if(frame.hands[0]) console.log(frame.hands[0].pinchStrength);
 
           // set correct camera control
           controlsIndex = focusObject(frame);
@@ -490,7 +493,7 @@ var riggedHandPlugin;
   </head>
 
   <body>
-    <div id="labels"></div>
+    
       
     <div id="info">
       <h3><b>SIFT</b></h3>
@@ -507,6 +510,7 @@ var riggedHandPlugin;
     </div>
     
     <div id="container"></div>
+    <div id="labels"></div>
     <div id="cursor"></div>
      <div id="footer">
       <p>CS 320 TUI Fall 2015 -- Used open source threeleapcontrols by Torsten Sprenger</p>
