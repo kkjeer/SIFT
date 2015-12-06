@@ -271,7 +271,7 @@ THREE.LeapObjectControls = function(camera, object) {
   this.panObject = function(frame) {
     if (_this.panEnabled && _this.applyGesture(frame, 'pan')) {
         
-        console.log("panning object");
+      console.log("panning object");
         
       var x = _this.position(frame, 'pan')[0];
       var y = _this.position(frame, 'pan')[1];

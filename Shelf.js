@@ -56,14 +56,33 @@ Shelf.prototype.clearBooks = function (objectsControls) {
         this.books = []; //empties books array
         this.shelfIsEmpty = true;
         
+        var len = objectsControls.length;
+        for(var i=0; i<len; i++){
+            var oc = objectsControls.shift(); //pop the head of array, not tail
+            oc.panEnabled = true;
+            objectsControls.push(oc);
+            
+        }
+        console.log(objectsControls);
+        
         //update objectControls: enable pan when books fall from shelf.
+        /*
+        for(objectControls in objectsControls){
+            console.log("pan before? " + objectControls.panEnabled);
+            objectControls.panEnabled = true;
+            console.log("pan after? " + objectControls.panEnabled);
+        }
+        */
+        
+        /*
         for(var i=0; i<objectsControls.length; i++){
             var objectControls = objectsControls.pop();
+            console.log("before:" + objectControls.panEnabled);
             objectControls.panEnabled = true;
             objectsControls.push(objectControls);
-            console.log(objectControls.panEnabled);
+            console.log("after:" + objectControls.panEnabled);
         }
-        
+        */
         //console.log("numbooks_floor:"+this.floor.length+",numbooks_shelf:"+this.books.length);
     }
 }
@@ -95,13 +114,14 @@ Shelf.prototype.addBook = function (scene, objects, objectsControls) {
   
   // *******Get rid of the scale function on objects******** 
   // *******Set objectControls.scaleEnabled = false
-   objectControls.scaleEnabled   = false;
+  objectControls.scaleEnabled   = false;
   objectControls.scaleSpeed     = 3;
   objectControls.scaleHands     = 1;
   objectControls.scaleFingers   = [4, 5];
 
   
   objectControls.panEnabled     = false; //books on the shelf should not be panned!!
+  console.log("disabled panning when adding book");
   objectControls.panSpeed       = 3;
   objectControls.panHands       = 2;
   objectControls.panFingers     = [6, 12];
