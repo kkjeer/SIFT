@@ -449,11 +449,12 @@
                 var handMesh = hand.data('riggedHand.mesh');
 
                 var screenPosition = handMesh.screenPosition(
-                  hand.palmPosition,
+                  //hand.palmPosition,
+                hand.fingers[1].tipPosition,
                   riggedHandPlugin.camera
                 );
-
-                label.style.left = screenPosition.x + 'px';
+                  
+                label.style.left = screenPosition.x +  'px';
                 label.style.bottom = screenPosition.y + 'px';
 
               }
@@ -524,12 +525,20 @@
 
   <body>
     
-      
     <div id="info">
       <h3><b>SIFT</b></h3>
       <h4>by Ye Eun Jeong, Katherine Kjeer, &amp; Hye Sun Yun</h4>
     </div>
-    <div id="overlay"></div>
+
+    <div id="book">
+        <table id="bookpages">
+          <tr>
+            <td>page1</td>
+            <td>page2</td>
+          </tr>
+        </table>
+    </div>
+      
     <div id="container"></div>
     <div id="labels"></div>
     <div id="cursor"></div>
