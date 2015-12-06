@@ -85,12 +85,15 @@ THREE.LeapCameraControls = function(camera) {
     return _this.transformFactor('pan') * THREE.Math.mapLinear(delta, -400, 400, -_this.step, _this.step);
   };
 
+    
   this.applyGesture = function(frame, action) {
     var hl = frame.hands.length;
     var fl = frame.pointables.length;
+    //console.log(frame.pointables);
 
     switch(action) {
       case 'rotate':
+            
         if (_this.rotateHands instanceof Array) {
           if (_this.rotateFingers instanceof Array) {
             if (_this.rotateHands[0] <= hl && hl <= _this.rotateHands[1] && _this.rotateFingers[0] <= fl && fl <= _this.rotateFingers[1]) return true;
@@ -104,6 +107,7 @@ THREE.LeapCameraControls = function(camera) {
             if (_this.rotateHands == hl && _this.rotateFingers == fl) return true;
           };
         };
+
         break;
       case 'zoom':
         if (_this.zoomHands instanceof Array) {

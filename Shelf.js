@@ -6,6 +6,8 @@ function Shelf (width, height, depth, name) {
 	this.color = 0x8b3626;
 
 	this.books = [];
+    this.floor = [];
+    this.shelfIsEmpty = false;
 
 	this.frame = new THREE.Object3D();
 	this.addInnerFrame();
@@ -38,17 +40,32 @@ Shelf.prototype.makeFlatShelf = function () {
 	return flatFrame;
 }
 
-Shelf.prototype.clearBooks = function () {
-	for (var i in this.books) {
-		var edgePos = new THREE.Vector3().copy(this.books[i].frame.position);
-		var bookXSign = edgePos.x == 0 ? 0 : edgePos.x/Math.abs(edgePos.x);
-		//edgePos.x += bookXSign * i * this.bookSpacing;
-		edgePos.z += this.depth;
-		var sign = i % 2 == 0 ? 1 : -1;
-		this.books[i].fall(edgePos, sign);
-		this.books[i].unhighlight(); //unhighlight when clearing the books from shelf
-	}
-	//this.books = [];
+Shelf.prototype.clearBooks = function (objectsControls) {
+    if(this.floor.length == 0){
+        this.floor = this.books; //floor gets all books
+        for (var i in this.books) {
+            var edgePos = new THREE.Vector3().copy(this.books[i].frame.position);
+            var bookXSign = edgePos.x == 0 ? 0 : edgePos.x/Math.abs(edgePos.x);
+            //edgePos.x += bookXSign * i * this.bookSpacing;
+            edgePos.z += this.depth;
+            var sign = i % 2 == 0 ? 1 : -1;
+            this.books[i].fall(edgePos, sign);
+            this.books[i].unhighlight(); //unhighlight when clearing the books from shelf
+        }
+        this.books = []; //empties books array--ignore this for now
+        this.shelfIsEmpty = true;
+        
+        
+        //update objectControls: enable pan when books fall from shelf.
+        for(var i=0; i<objectsControls.length; i++){
+            var objectControls = objectsControls.pop();
+            objectControls.panEnabled = true;
+            objectsControls.push(objectControls);
+            console.log(objectControls);
+        }
+        
+        //console.log("numbooks_floor:"+this.floor.length+",numbooks_shelf:"+this.books.length);
+    }
 }
 
 Shelf.prototype.addBook = function (scene, objects, objectsControls) {
@@ -84,7 +101,7 @@ Shelf.prototype.addBook = function (scene, objects, objectsControls) {
   objectControls.scaleFingers   = [4, 5];
 
   
-  objectControls.panEnabled     = true;
+  objectControls.panEnabled     = false; //books on the shelf should not be panned!!
   objectControls.panSpeed       = 3;
   objectControls.panHands       = 2;
   objectControls.panFingers     = [6, 12];
