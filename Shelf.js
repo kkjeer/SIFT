@@ -96,7 +96,7 @@ Shelf.prototype.intersectsBook = function (bookIndex) {
   var shelfRange = this.range();
   var bookRange = book.range();
 
-  var xTolerance = 0.5 * book.width;
+  var xTolerance = book.width;
   var xMinOkay = bookRange.minX >= shelfRange.minX - xTolerance && bookRange.minX <= shelfRange.maxX + xTolerance;
   var xMaxOkay = bookRange.maxX >= shelfRange.minX - xTolerance && bookRange.maxX <= shelfRange.maxX + xTolerance;
   var xOkay = xMinOkay || xMaxOkay;

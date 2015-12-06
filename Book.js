@@ -67,7 +67,7 @@ Book.prototype.pushIn = function () {
 	}).start();
 }
 
-Book.prototype.open = function (yPosition) {
+Book.prototype.open = function (yPosition, callback) {
 	//stop all current motion
 	this.stopMoving();
 
@@ -102,6 +102,10 @@ Book.prototype.open = function (yPosition) {
 		book.openBackTween.start();
 		for (var i in book.openPageTweens) {
 			book.openPageTweens[i].start();
+		}
+	}).onComplete(function () {
+		if (callback) {
+			callback();
 		}
 	}).start();
 }
