@@ -240,7 +240,7 @@
         return -2;
       };
 
-      function pullOutBookPinch(frame, shelf) {
+      function pullOutBookPinch(frame) {
         if(frame.hands.length > 0) {
           var hand = frame.hands[0];
 
@@ -252,7 +252,7 @@
       }
       };
 
-      function clickBook(frame,shelf) {
+      function clickBook(frame) {
         //checks for click on object
         frame.gestures.forEach(function(gesture){
         switch (gesture.type){
@@ -274,13 +274,12 @@
           console.log("clicked!");
           if (controlsIndex > -1) {
             //objects[controlsIndex].material.color.setHex(0x38f000);
-            shelf.books[controlsIndex].highlight(); //not sure if this works 
-          }
+            shelf.books[controlsIndex].highlight(); 
         }
     });
       };
 
-    function emptyShelfSwipe(frame, shelf) {
+    function emptyShelfSwipe(frame) {
       if(frame.hands.length > 0) {
           var hand = frame.hands[0];
 
@@ -342,11 +341,11 @@
           };
 
 
-         clickBook(frame,shelf);
+         clickBook(frame);
 
-         pullOutBookPinch(frame,shelf);
+         pullOutBookPinch(frame);
 
-         emptyShelfSwipe(frame,shelf);
+         emptyShelfSwipe(frame);
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;
