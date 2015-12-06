@@ -27,6 +27,20 @@ a {color: #ff0000;}
     z-index: 3;
 }
 
+table {
+    width: 680px;
+    height: 480px;
+
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    margin: auto;
+    background-color: beige;
+    z-index: 4;
+}
 
 
 #footer {
