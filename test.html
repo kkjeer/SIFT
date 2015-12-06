@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SIFT</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="js/leap.min.js"></script>
+    <script type="text/javascript">
+    // Setup Leap loop with frame callback function
+	var controllerOptions = {enableGestures: true};
+
+	Leap.loop(controllerOptions, function(frame) {
+		if (frame.hands[0]){
+	      console.log(frame.hands[0].pinchStrength.toPrecision(2));
+	    }
+	})
+
+    </script>
+  </head>
+  <body>
+  	<p>hi
+  </body>
+</html>

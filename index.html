@@ -249,7 +249,7 @@
       function pullOutBookPinch(frame) {
         if(frame.hands.length > 0) {
           var hand = frame.hands[0];
-
+          console.log(hand.pinchStrength > 0);
           if (hand.pinchStrength > 0.7) {
             if (index > -1) {
             shelf.books[index].pullOut(); //not sure if this works
@@ -334,8 +334,12 @@
 
         // leap loop
         Leap.loop(function(frame) {
+
           // show cursor
           showCursor(frame);
+
+          //test to see if pinch strength is readable
+          if(frame.hands[0]) console.log(frame.hands[0].pinchStrength);
 
           // set correct camera control
           controlsIndex = focusObject(frame);
