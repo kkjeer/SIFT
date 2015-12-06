@@ -122,10 +122,10 @@
           // leap object controls
           var objectControls = new THREE.LeapObjectControls(camera, object);
 
-          objectControls.rotateEnabled  = true;
-          objectControls.rotateSpeed    = 3;
-          objectControls.rotateHands    = 1;
-          objectControls.rotateFingers  = [2, 3];
+          objectControls.rotateEnabled  = false; //disabled rotate
+          //objectControls.rotateSpeed    = 3;
+          //objectControls.rotateHands    = 1;
+          //objectControls.rotateFingers  = [2, 3];
           
           // *******Get rid of the scale function on objects******** 
           // *******Set objectControls.scaleEnabled = false
@@ -251,8 +251,8 @@
           var hand = frame.hands[0];
 
           if (hand.pinchStrength > 0.7) {
-            if (controlsIndex > -1) {
-            shelf.books[controlsIndex].pullOut(); //not sure if this works
+            if (index > -1) {
+            shelf.books[index].pullOut(); //not sure if this works
           }
         }
       }
@@ -278,9 +278,9 @@
         // if the gesture is a circle or keyTap or screenTap, it is registered as a click on an object
         if (gesture.type == "circle" || gesture.type == "keyTap" || gesture.type == "screenTap") {
           console.log("clicked!");
-          if (controlsIndex > -1) {
+          if (index > -1) {
             //objects[controlsIndex].material.color.setHex(0x38f000);
-            shelf.books[controlsIndex].highlight(); 
+            shelf.books[index].highlight(); 
         }
     };
       });
