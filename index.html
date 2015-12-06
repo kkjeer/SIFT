@@ -293,16 +293,47 @@
         return -2;
       };
 
+        
+    //================================================================
+    //opening and closing books in overlay div
+        
+      function openBook(frame){
+          if(frame.hands[0]){
+              var hand = frame.hands[0];
+              console.log("pinchstrength: " + hand.pinchStrength);
+              if(hand.pinchStrength==1){
+                  if(index > -1){
+                      openBookDisplay(index); //should this be called on the book?
+                  }
+              }
+          }
+      };
+        
+      function openBookDisplay(index){
+          //fill in this function
+          console.log("open book index:" + index);
+      }
+        
+      function closeBook(frame){
+          if(frame.hands.length==2){
+              //check if hands are close together
+              if((frame.hands[0].palmPosition.x - frame.hands[0].palmPosition.x) < 45){
+                  console.log("closing book");
+              }
+          }
+      }
+    //================================================================
+        
       function pullOutBookPinch(frame) {
         if(frame.hands.length > 0) {
           var hand = frame.hands[0];
           console.log("pinchstrength:" + hand.pinchStrength);
           if (hand.pinchStrength==1) {
             if (index > -1) {
-            shelf.books[index].pullOut();
-          }
+                shelf.books[index].pullOut();
+                }
+           }
         }
-      }
       };
         
 
@@ -482,18 +513,9 @@
       
     <div id="info">
       <h3><b>SIFT</b></h3>
-
       <h4>by Ye Eun Jeong, Katherine Kjeer, &amp; Hye Sun Yun</h4>
-
-      <!-- <h4>Camera &amp; Object Controls</h4>
-
-      <b>ROTATING</b> ➞ 1 Hand &amp; 2-3 Fingers ・  <b>ZOOMING/SCALING</b> ➞ 1 Hand &amp; 4-5 Fingers  ・  <b>PANNING</b> ➞ 2 Hands &amp; 6-10 Fingers
-
-      <h4>Switch between Camera &amp; Object Mode</h4>
-
-      <b>SWITCHING</b> ➞ 1 Hand &amp; 1 Finger &amp; Choose object or nothing  -->
     </div>
-    
+    <div id="overlay"></div>
     <div id="container"></div>
     <div id="labels"></div>
     <div id="cursor"></div>
