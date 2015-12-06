@@ -438,11 +438,12 @@
                 var handMesh = hand.data('riggedHand.mesh');
 
                 var screenPosition = handMesh.screenPosition(
-                  hand.palmPosition,
+                  //hand.palmPosition,
+                hand.fingers[1].tipPosition,
                   riggedHandPlugin.camera
                 );
-
-                label.style.left = screenPosition.x + 'px';
+                  
+                label.style.left = screenPosition.x +  'px';
                 label.style.bottom = screenPosition.y + 'px';
 
               }
