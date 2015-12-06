@@ -107,7 +107,7 @@
           // var geometry = new THREE.CubeGeometry(Math.random()*60, Math.random()*60, Math.random()*60);
           // var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xefefef}));
           var book = new Book(60, 80, 20, Math.random() * 0xffffff, 'book' + i);
-          var object = book.frame;
+          var object = book; //used to be book.frame
           object.position.x = Math.random()* 300 - 150;
           object.position.y = Math.random()* 300 - 150;
           object.position.z = Math.random()* 200 - 100;
@@ -231,7 +231,13 @@
             console.log(intersected.object.name);
             //return scene.children.indexOf(intersected.object.name);
             var numdigits = intersected.object.name.indexOf("#");
-            return intersected.object.name.substring(4,numdigits);
+            var objectname = intersected.object.name;
+              if(objectname.substring(0,4)=="book"){
+                  return objectname.substring(4,numdigits);
+              }else{
+                  return -1;
+              }
+            //return intersected.object.name.substring(4,numdigits);
           } else {
             return -1;
           };
