@@ -41,8 +41,9 @@ Shelf.prototype.makeFlatShelf = function () {
 }
 
 Shelf.prototype.clearBooks = function (objectsControls) {
-    if(this.floor.length == 0){
+    if(this.floor.length == 0){ //check if it's already registered a swipe gesture before
         this.floor = this.books; //floor gets all books
+        
         for (var i in this.books) {
             var edgePos = new THREE.Vector3().copy(this.books[i].frame.position);
             var bookXSign = edgePos.x == 0 ? 0 : edgePos.x/Math.abs(edgePos.x);
@@ -52,16 +53,15 @@ Shelf.prototype.clearBooks = function (objectsControls) {
             this.books[i].fall(edgePos, sign);
             this.books[i].unhighlight(); //unhighlight when clearing the books from shelf
         }
-        this.books = []; //empties books array--ignore this for now
+        this.books = []; //empties books array
         this.shelfIsEmpty = true;
-        
         
         //update objectControls: enable pan when books fall from shelf.
         for(var i=0; i<objectsControls.length; i++){
             var objectControls = objectsControls.pop();
             objectControls.panEnabled = true;
             objectsControls.push(objectControls);
-            console.log(objectControls);
+            console.log(objectControls.panEnabled);
         }
         
         //console.log("numbooks_floor:"+this.floor.length+",numbooks_shelf:"+this.books.length);
