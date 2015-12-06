@@ -48,6 +48,7 @@
 
         // camera
         camera = new THREE.PerspectiveCamera(45, $(window).width()/$(window).height(), 0.1, 10000);
+
         camera.position.x = 300;
         camera.position.y = 400;
         camera.position.z = 800;
@@ -58,13 +59,12 @@
         cameraControls = new THREE.LeapCameraControls(camera);
 
         
-        cameraControls.rotateEnabled  = false;          
-        cameraControls.rotateSpeed    = 3;
+        cameraControls.rotateEnabled  = true;          
+        cameraControls.rotateSpeed    = 0.5;
         cameraControls.rotateHands    = 1;
-        cameraControls.rotateFingers  = [4, 5];
-          
-        // cameraControls.rotateMin      = ;
-        // cameraControls.rotateMax      = ;
+        cameraControls.rotateFingers  = [4,5];  
+        cameraControls.rotateMin      = 0;
+        cameraControls.rotateMax      = Math.PI/30;
         
         cameraControls.zoomEnabled    = false;
         cameraControls.zoomSpeed      = 6;
@@ -392,6 +392,17 @@
     } //closing frame.hands.length check
     };
 
+    function isHandGrab (frame) {
+       if(frame.hands[0]){
+              var hand = frame.hands[0];
+              console.log("grabstrength: " + hand.grabStrength);
+              if(hand.grabStrength==1){
+                  return true;
+                  } else {
+                    return false;
+                  }
+              }
+          };
 
       function render() {
         //requestAnimationFrame(render); //temporary - for testing without the LeapMotion
@@ -471,6 +482,9 @@
          //pullOutBookPinch(frame);
 
          emptyShelfSwipe(frame);
+
+         isHandGrab(frame);
+         console.log("isHandGrab: "+ isHandGrab(frame));
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;

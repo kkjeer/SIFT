@@ -212,7 +212,9 @@ THREE.LeapCameraControls = function(camera) {
 
   // methods
   this.rotateCamera = function(frame) {
+
     if (_this.rotateEnabled && _this.applyGesture(frame, 'rotate')) {
+        
       // rotate around axis in xy-plane (in target coordinate system) which is orthogonal to camera vector
       var y = _this.position(frame, 'rotate')[1];
       if (!_rotateYLast) _rotateYLast = y;
@@ -243,7 +245,7 @@ THREE.LeapCameraControls = function(camera) {
     } else {
       _rotateYLast = null;
       _rotateXLast = null;      
-    };
+      };
   };
 
   this.zoomCamera = function(frame) {
