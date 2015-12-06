@@ -47,11 +47,11 @@
         $("#container").append(renderer.domElement);
 
         // camera
-        camera = new THREE.PerspectiveCamera(25, $(window).width()/$(window).height(), 0.1, 10000);
-        camera.position.x = 500;
-        camera.position.y = 900;
-        camera.position.z = 500;
-        var origin = new THREE.Vector3(0, 0, 0);
+        camera = new THREE.PerspectiveCamera(35, $(window).width()/$(window).height(), 0.1, 10000);
+        camera.position.x = 300;
+        camera.position.y = 400;
+        camera.position.z = 800;
+        var origin = new THREE.Vector3(0, 200, 0); //lower the camera origin
         camera.lookAt(origin);
 
         // leap camera controls
@@ -173,11 +173,12 @@
           if (index != controlsIndex && controlsIndex > -2) {
             // new object or camera to control
             if (controlsIndex > -2) {
-              if (index > -1) objects[index].unhighlight(); //shelf.books[index].unhighlight();
+              if (index > -1){
+                  shelf.books[index].unhighlight(); //objects[index].unhighlight();
+                  shelf.books[index].pushIn();
+              }
               index = controlsIndex;
-              //if (index > -1) objects[index].material.color.setHex(0xff0000);
-              if (index > -1) objects[index].highlight(); //shelf.books[index].highlight();
-              //if (index > -1) shelf.books[index].highlight();
+              if (index > -1) shelf.books[index].highlight(); //objects[index].highlight();
             }
           };
         }; 
@@ -199,11 +200,16 @@
       };
 
       function showCursor(frame) {
-        var hl = frame.hands.length;
-        var fl = frame.pointables.length;
+        //var hl = frame.hands.length;
+        //var fl = frame.pointables.length;
+          
+        var index_isExtended = false;
+        if(frame.hands.length > 0){
+            index_isExtended = frame.hands[0].fingers[1].extended;
+        }
 
-        if (hl == 1 && fl == 5) {
-          var f = frame.pointables[0];
+        if (index_isExtended) {
+          var f = frame.hands[0].fingers[1]; //index finger
           var cont = $(renderer.domElement);
           var offset = cont.offset();
           var coords = transform(f.tipPosition, cont.width(), cont.height());
@@ -214,14 +220,21 @@
           $("#cursor").css('top', -1000);
         };
       };
+        
 
       function focusObject(frame) {
         var hl = frame.hands.length;
-        var fl = frame.pointables.length;
-        console.log("hl:"+hl+"& fl:" +fl);
-        if (hl == 1 && fl == 5) {
-          console.log("entered if of focusObject");
-          var f = frame.pointables[0];
+        //var fl = frame.pointables.length;
+        
+        var index_isExtended = false;
+        if(frame.hands.length > 0){
+            index_isExtended = frame.hands[0].fingers[1].extended;
+        }
+        //original check:
+        if(hl==1) {          
+        //if (index_isExtended) {
+          //console.log("entered if of focusObject");
+          var f = frame.hands[0].fingers[1];
           var cont = $(renderer.domElement);
           var coords = transform(f.tipPosition, cont.width(), cont.height());
           var vpx = (coords[0]/cont.width())*2 - 1;
@@ -229,20 +242,21 @@
           var vector = new THREE.Vector3(vpx, vpy, 0.5);
           projector.unprojectVector(vector, camera);
           var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-          var intersects = raycaster.intersectObjects(objects);
-          //var intersects = raycaster.intersectObjects(scene.children, true);
-          console.log(raycaster != null);
+          //var intersects = raycaster.intersectObjects(objects);
+          var intersects = raycaster.intersectObjects(scene.children, true);
 
-          console.log("intersects:" + intersects.length);
+          //console.log("intersects:" + intersects.length);
           if (intersects.length > 0) { 
-            var i = 0;
-            while(!intersects[i].object.visible) i++;
-            var intersected = intersects[i];
-            console.log(intersected.object.name);
+            //var i = 0;
+            //while(!intersects[i].object.visible) i++;
+            //var intersected = intersects[i];
+            var intersected = intersects[0];
+            //console.log(intersected.object.name);
             //return scene.children.indexOf(intersected.object.name);
             var numdigits = intersected.object.name.indexOf("#");
             var objectname = intersected.object.name;
               if(objectname.substring(0,4)=="book"){
+                  //console.log(objectname);
                   return objectname.substring(4,numdigits);
               }else{
                   return -1;
@@ -259,14 +273,15 @@
       function pullOutBookPinch(frame) {
         if(frame.hands.length > 0) {
           var hand = frame.hands[0];
-        //  console.log(hand.pinchStrength > 0);
-          if (hand.pinchStrength > 0.85) {
+          console.log("pinchstrength:" + hand.pinchStrength);
+          if (hand.pinchStrength==1) {
             if (index > -1) {
-            shelf.books[index].pullOut(); //not sure if this works
+            shelf.books[index].pullOut();
           }
         }
       }
       };
+        
 
       function clickBook(frame) {
         //checks for click on object
@@ -386,12 +401,8 @@
             
         function(frame) {
 
-         // console.log(frame.pointables.length);
           // show cursor
           showCursor(frame);
-
-          //test to see if pinch strength is readable
-         // if(frame.hands[0]) console.log(frame.hands[0].pinchStrength);
 
           // set correct camera control
           controlsIndex = focusObject(frame);
