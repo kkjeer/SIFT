@@ -12,7 +12,8 @@
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/three.min.js"></script>
     <script type="text/javascript" src="js/tween_full.js"></script>
-    <script type="text/javascript" src="js/leap-0.6.4.min.js"></script>
+    <!-- <script type="text/javascript" src="js/leap.min.js"></script> -->
+    <script type="text/javascript" src="js/leap-0.6.2.js"></script>
     <script type="text/javascript" src="LeapCameraControls.js"></script>
     <script type="text/javascript" src="LeapObjectControls.js"></script>
     <script type="text/javascript" src="graphicsFunctions.js"></script>
@@ -335,6 +336,7 @@
         // leap loop
         Leap.loop(function(frame) {
 
+          console.log(frame.pointables.length);
           // show cursor
           showCursor(frame);
 
