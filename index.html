@@ -107,7 +107,7 @@
           // var geometry = new THREE.CubeGeometry(Math.random()*60, Math.random()*60, Math.random()*60);
           // var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0xefefef}));
           var book = new Book(60, 80, 20, Math.random() * 0xffffff, 'book' + i);
-          var object = book.frame; //does it matter if it's book or book.frame? no errors if book is used
+          var object = book; //does it matter if it's book or book.frame? no errors if book is used
           object.position.x = Math.random()* 300 - 150;
           object.position.y = Math.random()* 300 - 150;
           object.position.z = Math.random()* 200 - 100;
@@ -166,10 +166,10 @@
           if (index != controlsIndex && controlsIndex > -2) {
             // new object or camera to control
             if (controlsIndex > -2) {
-              if (index > -1) shelf.books[index].unhighlight();
+              if (index > -1) objects[index].unhighlight(); //shelf.books[index].unhighlight();
               index = controlsIndex;
               //if (index > -1) objects[index].material.color.setHex(0xff0000);
-              if (index > -1) shelf.books[index].highlight();
+              if (index > -1) objects[index].highlight(); //shelf.books[index].highlight();
               //if (index > -1) shelf.books[index].highlight();
             }
           };
