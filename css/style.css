@@ -66,3 +66,10 @@ canvas {
   -webkit-border-radius: 6px;
   border: 1px solid #ff0000; 
 }
+
+
+
+label {
+position: fixed;
+white-space: nowrap;
+}

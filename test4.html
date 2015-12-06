@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <title>Handedness Demo</title>
+    <script src="js/three.min.js"></script>
+    <script src="js/leap-0.6.2.min.js"></script>
+    <script src="js/leap-plugins-0.1.6.1.js"></script>
+    <script src="js/leap.rigged-hand-0.1.3.min.js"></script>
+
+    <style>
+      label {
+        position: fixed;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="labels"></div>
+  </body>
+
+  <script type="text/javascript" class="codepen">
+//****************rigged hand code: visual feedback of hand model
+var riggedHandPlugin;
+
+    Leap.loop({
+      hand: function(hand){
+        var label = hand.data('label');
+
+
+        if (!label){
+
+          label = document.createElement('label');
+          //document.body.appendChild(label);
+
+          //label.innerHTML = hand.type + " hand";
+
+          hand.data('label', label)
+
+        }
+
+
+        var handMesh = hand.data('riggedHand.mesh');
+
+        var screenPosition = handMesh.screenPosition(
+          hand.palmPosition,
+          riggedHandPlugin.camera
+        );
+
+        label.style.left = screenPosition.x + 'px';
+        label.style.bottom = screenPosition.y + 'px';
+
+      }
+    })
+    .use('riggedHand')
+    .use('handEntry')
+    .on('handLost', function(hand){
+        var label = hand.data('label');
+        if (label){
+          document.body.removeChild(label);
+          hand.data({label: undefined});
+        }
+    })
+
+
+    riggedHandPlugin = Leap.loopController.plugins.riggedHand;
+        
+
+  </script>
+</html>

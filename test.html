@@ -3,16 +3,23 @@
   <head>
     <title>SIFT</title>
     <meta charset="utf-8">
-    <script type="text/javascript" src="js/leap-0.6.4.min.js"></script>
-    <script type="text/javascript" src="js/leap-plugins-0.1.4.1.min.js"></script>
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/leap-0.6.2.js"></script>
+    <script type="text/javascript" src="js/leap.rigged-hand-0.1.7.js"></script>
+    <script type="text/javascript" src="js/leap-plugins-0.1.11.js"></script>
     <script type="text/javascript">
     // Setup Leap loop with frame callback function
 	var controllerOptions = {enableGestures: true};
 
+        (window.controller = new Leap.Controller)
+          .use('riggedHand')
+          .connect()
+        
 	Leap.loop(controllerOptions, function(frame) {
 		if (frame.hands[0]){
 	      console.log(frame.hands[0].pinchStrength.toPrecision(2));
 	    }
+        
 	})
 
     </script>
