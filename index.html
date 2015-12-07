@@ -34,6 +34,8 @@
       var shelf;
       var bookOverlayIsOpen = false;
       var currentOpenBookIndex = -1;
+      var highlightedIndex = -1;
+      var grabbed = false;
 
       function init() {
         // is webgl supported?
@@ -169,38 +171,26 @@
 
       
       function changeControlsIndex() {
-        //console.log("numbooks_floor:"+shelf.floor.length+",numbooks_shelf:"+shelf.books.length);  
-        
           if (lastControlsIndex == controlsIndex) {
-          //console.log("controlsIndex:" + controlsIndex);
           if (index != controlsIndex && controlsIndex > -2) {
             // new object or camera to control
             if (controlsIndex > -2) {
-                //console.log("object[index]: " + objects[index]);
-                
                 if(shelf.shelfIsEmpty){ //books are on the floor
-                    if(index > -1) shelf.floor[index].unhighlight();
+                    if(index > -1) {
+                        shelf.floor[index].unhighlight();
+                        highlightedIndex = -1; //nullify highlighted book index number
+                    }
                     index = controlsIndex;
-                    if(index > -1) shelf.floor[index].highlight();
+                    if(index > -1) {
+                        shelf.floor[index].highlight();
+                        highlightedIndex = index; //to pass into book drop method
+                        //console.log("highlighted: " + highlightedIndex);
+                    }
                 }else{ //books are on the shelf
                     if(index > -1) shelf.books[index].pushIn();
                     index = controlsIndex;
                     if(index > -1)shelf.books[index].pullOut();  
                 }
-                
-                /* //old code
-                  if (index > -1 && !shelf.shelfIsEmpty){ //if object is a book
-                      shelf.books[index].pushIn();
-                      shelf.books[index].unhighlight();
-                      //objects[index].unhighlight();
-                  }
-                  index = controlsIndex;
-                  if (index > -1) { //if object is a book
-                      shelf.books[index].pullOut();
-                      shelf.books[index].highlight();
-                      //objects[index].highlight();
-                  }
-               */
                 
             }
           };
@@ -305,7 +295,7 @@
         if(frame.hands.length==1){ //if there is one hand
             
             //Open book by pinching
-            if(frame.hands[0].pinchStrength==1){
+            if(frame.hands[0].pinchStrength > 0.8){
                 //console.log("on shelf? " + (shelf.books[index]!=null));
                 
                 //only open when: it's a valid book index, and div is not already open
@@ -325,7 +315,6 @@
             
             //close book when the two hands are touching
             if(Math.abs(frame.hands[0].palmPosition[0] - frame.hands[1].palmPosition[0]) < 30){
-            //if(frame.hands[0].grabStrength==1 && frame.hands[1].grabStrength==1){
                 currentOpenBookIndex = -1;
                 bookOverlayIsOpen = false;
                 $("#book").css("visibility","hidden");
@@ -343,50 +332,6 @@
     //================================================================
         
         
-    /*
-      function pullOutBookPinch(frame) {
-        if(frame.hands.length > 0) {
-          var hand = frame.hands[0];
-          console.log("pinchstrength:" + hand.pinchStrength);
-          if (hand.pinchStrength==1) {
-            if (index > -1) {
-                shelf.books[index].pullOut();
-                }
-           }
-        }
-      };
-        
-
-      function clickBook(frame) {
-        //checks for click on object
-        frame.gestures.forEach(function(gesture){
-        switch (gesture.type){
-          case "circle":
-              //console.log("Circle Gesture");
-              break;
-          case "keyTap":
-              //console.log("Key Tap Gesture");
-              break;
-          case "screenTap":
-              //console.log("Screen Tap Gesture");
-              break;
-          case "swipe":
-              console.log("Swipe Gesture");
-              break;
-        }
-        // if the gesture is a circle or keyTap or screenTap, it is registered as a click on an object
-        if (gesture.type == "circle" || gesture.type == "keyTap" || gesture.type == "screenTap") {
-          //console.log("clicked!");
-          if (index > -1) {
-            //objects[controlsIndex].material.color.setHex(0x38f000);
-            shelf.books[index].highlight(); 
-        }
-    };
-      });
-      };
-      
-    */
-
     function turnpage(currentOpenBookIndex){
         //upon swipe on a book overlay div, update div contents to be next two pages of the book
         //console.log("turning page of book " + currentOpenBookIndex);
@@ -395,7 +340,8 @@
     }
         
     function swipeAction(frame) {
-        if(frame.hands[0]){
+        if(frame.hands[0] && frame.gestures.length > 0){        
+
             frame.gestures.forEach(function(gesture){
                 if(gesture.type=="swipe"){
                     if(bookOverlayIsOpen){
@@ -407,8 +353,25 @@
                     }
                 }
             });
+
         }
     }
+    
+    /* //grabbing does not work effectively--too sensitive
+    function grabAction(frame){
+        if(frame.hands.length==2){
+            if(frame.hands[0].grabStrength==1 && frame.hands[1].grabStrength==1){
+                console.log("grabbing both!");
+                grabbed = true;
+                if(highlightedIndex!=-1 && grabbed){ //if there is a highlighted book (that is being panned)
+                    shelf.floor[index] = null;
+                    shelf.addBook(scene, objects, objectsControls);
+                    grabbed = false;
+                }
+            }
+        }
+    }
+    */
     
 
       function render() {
