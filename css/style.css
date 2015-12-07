@@ -26,10 +26,25 @@ a {color: #ff0000;}
      margin: auto;
      background-color: dimgrey;
      box-shadow: 30px 30px 100px #999999;
-     opacity: 0.9;
+     opacity: 0.6;
      z-index: 3;
  }
  
+#bookdesc {
+    width: 200px;
+    height: 200px;
+    
+    font-size: 20px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: auto;
+    margin-left: 80%;
+    z-index: 3;
+}
+
  table {
      width: 680px;
      height: 480px;

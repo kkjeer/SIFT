@@ -179,17 +179,24 @@
                     if(index > -1) {
                         shelf.floor[index].unhighlight();
                         highlightedIndex = -1; //nullify highlighted book index number
+                        document.getElementById("bookdesc").innerHTML = "";
                     }
                     index = controlsIndex;
                     if(index > -1) {
                         shelf.floor[index].highlight();
                         highlightedIndex = index; //to pass into book drop method
-                        //console.log("highlighted: " + highlightedIndex);
+                        document.getElementById("bookdesc").innerHTML = "Book number " + index;
                     }
                 }else{ //books are on the shelf
-                    if(index > -1) shelf.books[index].pushIn();
+                    if(index > -1) {
+                        shelf.books[index].pushIn();
+                        document.getElementById("bookdesc").innerHTML = "";
+                    }
                     index = controlsIndex;
-                    if(index > -1)shelf.books[index].pullOut();  
+                    if(index > -1){
+                        shelf.books[index].pullOut();
+                        document.getElementById("bookdesc").innerHTML = "Book number " + index;
+                    }
                 }
                 
             }
@@ -451,6 +458,13 @@
 
           swipeAction(frame); //act upon swipe
           bookOpenClose(frame); //open or close book on shelf
+          
+            
+          /*
+          if(highlightedIndex!=-1){
+            shelf.addIntersectedBook(highlightedIndex);
+          }
+          */
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;
@@ -495,6 +509,7 @@
       <h4>by Ye Eun Jeong, Katherine Kjeer, &amp; Hye Sun Yun</h4>
     </div>
 
+     <div id="bookdesc"></div>
      <div id="book">
          <table id="bookpages">
            <tr>

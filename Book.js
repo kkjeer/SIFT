@@ -26,6 +26,21 @@ function Book (width, height, depth, color, name) {
 	this.addInnerFrame();
 }
 
+
+Book.prototype.range = function () {
+	var framePos = this.frame.position;
+	var frameRot = this.frame.rotation;
+	var minX = framePos.x - 0.0 * this.width;
+	var maxX = framePos.x + 1.0 * this.width;
+  var minY = framePos.y - 0.5 * this.height;
+  var maxY = framePos.y + 0.5 * this.height;
+  var minZ = framePos.z - 0.5 * this.depth;
+  var maxZ = framePos.z + 0.5 * this.depth;
+
+  return {'minX': minX, 'maxX': maxX, 'minY': minY, 'maxY': maxY, 'minZ': minZ, 'maxZ': maxZ};
+}
+
+
 Book.prototype.pullOut = function () {
 	if (this.isOut) {
 		return;
