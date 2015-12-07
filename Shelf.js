@@ -82,8 +82,8 @@ Shelf.prototype.addIntersectedBook = function (bookIndex) {
   book.frame.rotation.y = Math.PI/2;
   book.unhighlight(); 
 
-  this.floor.splice(bookIndex, 1);
-  this.books.push(book);
+  this.floor[bookIndex] = undefined;
+  this.books[bookIndex] = book;
 }
 
 Shelf.prototype.intersectsBook = function (bookIndex) {
@@ -170,7 +170,7 @@ Shelf.prototype.addBook = function (scene, objects, objectsControls) {
 	var bookDepth = this.width/this.numBooks;
 	var bookSpacing = 0.3 * bookDepth;
 	this.bookSpacing = bookSpacing;
-	var book = new Book(bookWidth, bookHeight, randomInRange(0.5, 1) * (bookDepth - bookSpacing), Math.random() * 0xffffff, 'book' + this.books.length);
+	var book = new Book(bookWidth, bookHeight, randomInRange(0.5, 1) * (bookDepth - bookSpacing), Math.random() * 0xffffff, this.books.length);
 	var object = book.frame;
 	object.position.copy(shelfPos);
 	object.position.x -= 0.5 * this.width;

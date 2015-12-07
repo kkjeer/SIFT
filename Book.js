@@ -1,10 +1,11 @@
-function Book (width, height, depth, color, name) {
+function Book (width, height, depth, color, index) {
 	//properties from parameters
 	this.width = width;
 	this.height = height;
 	this.depth = depth;
 	this.color = color;
-	this.name = name;
+	this.name = 'book' + index;
+	this.index = index;
 
 	//animation properties: pulling off and on the shelf
 	this.isOut = false;
