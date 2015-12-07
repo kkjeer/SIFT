@@ -43,7 +43,18 @@ a {color: #ff0000;}
      margin: auto;
      background-color: beige;
      z-index: 4;
+     
  }
+
+.bookpage {
+    text-align: center;
+    font-size: 80px;
+}
+
+#bookpage2 {
+    border-left: solid;
+    border-left-width: 1px;
+}
 
 
 

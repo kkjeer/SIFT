@@ -33,6 +33,7 @@
       var lastControlsIndex = -1, controlsIndex = -1, index = -1;
       var shelf;
       var bookOverlayIsOpen = false;
+      var currentOpenBookIndex = -1;
 
       function init() {
         // is webgl supported?
@@ -299,7 +300,7 @@
         
     function bookOpenClose(frame){ //applied to books on the shelf, not on the floor
         
-        if(frame.hands.length==1){
+        if(frame.hands.length==1){ //if there is one hand
             
             //Open book by pinching
             if(frame.hands[0].pinchStrength==1){
@@ -310,16 +311,18 @@
                     bookOverlayIsOpen = true;
                     $("#book").css("visibility","visible");
                     openBookDisplay(index);
+                    currentOpenBookIndex = index;
                 }
             }
             
-        }else if(frame.hands.length==2){
+        }else if(frame.hands.length==2){ //if there are two hands
             
             //console.log("palm distance: " + Math.abs(frame.hands[0].palmPosition[0]-frame.hands[1].palmPosition[0]));
             
+            //close book when the two hands are touching
             if(Math.abs(frame.hands[0].palmPosition[0] - frame.hands[1].palmPosition[0]) < 30){
             //if(frame.hands[0].grabStrength==1 && frame.hands[1].grabStrength==1){
-                
+                currentOpenBookIndex = -1;
                 bookOverlayIsOpen = false;
                 $("#book").css("visibility","hidden");
             }
@@ -329,8 +332,8 @@
         
     //helper to load the pages according to book index
     function openBookDisplay(index){
-      //fill in this function
-      console.log("open book index:" + index);
+        document.getElementById("bookpage1").innerHTML = "Book " + index + "<br> Page 1";
+        document.getElementById("bookpage2").innerHTML = "Book " + index + "<br> Page 2";
     }
 
     //================================================================
@@ -380,11 +383,24 @@
       
     */
 
-    function emptyShelfSwipe(frame) {
+    function turnpage(currentOpenBookIndex){
+        //upon swipe on a book overlay div, update div contents to be next two pages of the book
+        //console.log("turning page of book " + currentOpenBookIndex);
+        document.getElementById("bookpage1").innerHTML = "Book " + currentOpenBookIndex + "<br> Page 3";
+        document.getElementById("bookpage2").innerHTML = "Book " + currentOpenBookIndex + "<br> Page 4";
+    }
+        
+    function swipeAction(frame) {
         if(frame.hands[0]){
             frame.gestures.forEach(function(gesture){
-                if(gesture.type=="swipe" && !bookOverlayIsOpen){
-                    shelf.clearBooks(objectsControls);
+                if(gesture.type=="swipe"){
+                    if(bookOverlayIsOpen){
+                        //if book overlay div is open, turn pages of book
+                        turnpage(currentOpenBookIndex);
+                    }else{
+                        //if book overlay div is not open, clear books on the shelf
+                        shelf.clearBooks(objectsControls);
+                    }
                 }
             });
         }
@@ -466,11 +482,8 @@
           };
 
 
-         //clickBook(frame);
-         //pullOutBookPinch(frame);
-            
-            emptyShelfSwipe(frame);
-            bookOpenClose(frame);
+          swipeAction(frame); //act upon swipe
+          bookOpenClose(frame); //open or close book on shelf
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;
@@ -518,8 +531,8 @@
      <div id="book">
          <table id="bookpages">
            <tr>
-             <td id="bookpage1">page1</td>
-             <td id="bookpage2">page2</td>
+             <td class="bookpage" id="bookpage1">page1</td>
+             <td class="bookpage" id="bookpage2">page2</td>
            </tr>
          </table>
      </div>
