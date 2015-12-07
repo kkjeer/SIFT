@@ -32,6 +32,7 @@
       var coords1, coords2, coords3;
       var lastControlsIndex = -1, controlsIndex = -1, index = -1;
       var shelf;
+      var bookOverlayIsOpen = false;
 
       function init() {
         // is webgl supported?
@@ -296,35 +297,42 @@
         
     //================================================================
         
+    function bookOpenClose(frame){ //applied to books on the shelf, not on the floor
         
+        if(frame.hands.length==1){
+            
+            //Open book by pinching
+            if(frame.hands[0].pinchStrength==1){
+                //console.log("on shelf? " + (shelf.books[index]!=null));
+                
+                //only open when: it's a valid book index, book is on the shelf, and div is not already open
+                if((index > -1 && shelf.books[index]!=null) && !bookOverlayIsOpen){
+                    bookOverlayIsOpen = true;
+                    $("#book").css("visibility","visible");
+                    openBookDisplay(index);
+                }
+            }
+            
+        }else if(frame.hands.length==2){
+            
+            //console.log("palm distance: " + Math.abs(frame.hands[0].palmPosition[0]-frame.hands[1].palmPosition[0]));
+            
+            if(Math.abs(frame.hands[0].palmPosition[0] - frame.hands[1].palmPosition[0]) < 30){
+            //if(frame.hands[0].grabStrength==1 && frame.hands[1].grabStrength==1){
+                
+                bookOverlayIsOpen = false;
+                $("#book").css("visibility","hidden");
+            }
+        }
         
-    //opening and closing books in overlay div
+    }    
         
-      function openBook(frame){
-          if(frame.hands[0]){
-              var hand = frame.hands[0];
-              console.log("pinchstrength: " + hand.pinchStrength);
-              if(hand.pinchStrength==1){
-                  if(index > -1){
-                      openBookDisplay(index); //should this be called on the book?
-                  }
-              }
-          }
-      };
-        
-      function openBookDisplay(index){
-          //fill in this function
-          console.log("open book index:" + index);
-      }
-        
-      function closeBook(frame){
-          if(frame.hands.length==2){
-              //check if hands are close together
-              if((frame.hands[0].palmPosition.x - frame.hands[0].palmPosition.x) < 45){
-                  console.log("closing book");
-              }
-          }
-      }
+    //helper to load the pages according to book index
+    function openBookDisplay(index){
+      //fill in this function
+      console.log("open book index:" + index);
+    }
+
     //================================================================
         
         
@@ -375,7 +383,7 @@
     function emptyShelfSwipe(frame) {
         if(frame.hands[0]){
             frame.gestures.forEach(function(gesture){
-                if(gesture.type=="swipe"){
+                if(gesture.type=="swipe" && !bookOverlayIsOpen){
                     shelf.clearBooks(objectsControls);
                 }
             });
@@ -460,8 +468,9 @@
 
          //clickBook(frame);
          //pullOutBookPinch(frame);
-
-         emptyShelfSwipe(frame);
+            
+            emptyShelfSwipe(frame);
+            bookOpenClose(frame);
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;
