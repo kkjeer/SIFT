@@ -170,11 +170,11 @@
         //console.log("numbooks_floor:"+shelf.floor.length+",numbooks_shelf:"+shelf.books.length);  
         
           if (lastControlsIndex == controlsIndex) {
-          console.log("controlsIndex:" + controlsIndex);
+          //console.log("controlsIndex:" + controlsIndex);
           if (index != controlsIndex && controlsIndex > -2) {
             // new object or camera to control
             if (controlsIndex > -2) {
-                console.log("object[index]: " + objects[index]);
+                //console.log("object[index]: " + objects[index]);
                 
                 if(shelf.shelfIsEmpty){ //books are on the floor
                     if(index > -1) shelf.floor[index].unhighlight();
@@ -279,7 +279,7 @@
             var numdigits = intersected.object.name.indexOf("#");
             var objectname = intersected.object.name;
               if(objectname.substring(0,4)=="book"){
-                  console.log("object name: " + objectname);
+                  //console.log("object name: " + objectname);
                   return objectname.substring(4,numdigits);
               }else{
                   return -1;
@@ -295,6 +295,9 @@
 
         
     //================================================================
+        
+        
+        
     //opening and closing books in overlay div
         
       function openBook(frame){
@@ -324,6 +327,8 @@
       }
     //================================================================
         
+        
+    /*
       function pullOutBookPinch(frame) {
         if(frame.hands.length > 0) {
           var hand = frame.hands[0];
@@ -364,34 +369,19 @@
     };
       });
       };
+      
+    */
 
     function emptyShelfSwipe(frame) {
-      if(frame.hands.length > 0) {
-          var hand = frame.hands[0];
-
-
-      frame.gestures.forEach(function(gesture){
-        switch (gesture.type){
-          case "circle":
-              //console.log("Circle Gesture");
-              break;
-          case "keyTap":
-              //console.log("Key Tap Gesture");
-              break;
-          case "screenTap":
-              //console.log("Screen Tap Gesture");
-              break;
-          case "swipe":
-              console.log("Swipe Gesture");
-              break;
+        if(frame.hands[0]){
+            frame.gestures.forEach(function(gesture){
+                if(gesture.type=="swipe"){
+                    shelf.clearBooks(objectsControls);
+                }
+            });
         }
-      if (gesture.type == "swipe") {
-        shelf.clearBooks(objectsControls);
     }
-    });
-    } //closing frame.hands.length check
-    };
-
+    
 
       function render() {
         //requestAnimationFrame(render); //temporary - for testing without the LeapMotion
@@ -516,14 +506,14 @@
       <h4>by Ye Eun Jeong, Katherine Kjeer, &amp; Hye Sun Yun</h4>
     </div>
 
-    <div id="overlay"> OVERLAY DIV
-        <table id="bookpages">
-          <tr>
-            <td>page1</td>
-            <td>page2</td>
-          </tr>
-        </table>
-    </div>
+     <div id="book">
+         <table id="bookpages">
+           <tr>
+             <td id="bookpage1">page1</td>
+             <td id="bookpage2">page2</td>
+           </tr>
+         </table>
+     </div>
       
     <div id="container"></div>
     <div id="labels"></div>

@@ -10,22 +10,41 @@ h4 {font-size: 15px; margin-top: -20px;}
 
 a {color: #ff0000;}
 
-#book {
-    width: 700px;
-    height: 500px;
 
-    position: absolute;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
 
-    margin: auto;
-    background-color: aqua;
-    box-shadow: 30px 30px 100px #999999;
-    opacity: 0.9;
-    z-index: 3;
-}
+ #book {
+     display: none; /* hides book overlay */
+     width: 700px;
+     height: 500px;
+ 
+     position: absolute;
+     top:0;
+     bottom: 0;
+     left: 0;
+     right: 0;
+ 
+     margin: auto;
+     background-color: darkslategrey;
+     box-shadow: 30px 30px 100px #999999;
+     opacity: 0.9;
+     z-index: 3;
+ }
+ 
+ table {
+     width: 680px;
+     height: 480px;
+ 
+     position: absolute;
+     top:0;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     
+     margin: auto;
+     background-color: beige;
+     z-index: 4;
+ }
+
 
 
 

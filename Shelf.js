@@ -63,7 +63,6 @@ Shelf.prototype.clearBooks = function (objectsControls) {
             objectsControls.push(oc);
             
         }
-        console.log(objectsControls);
         
         //update objectControls: enable pan when books fall from shelf.
         /*
@@ -121,7 +120,7 @@ Shelf.prototype.addBook = function (scene, objects, objectsControls) {
 
   
   objectControls.panEnabled     = false; //books on the shelf should not be panned!!
-  console.log("disabled panning when adding book");
+  //console.log("disabled panning when adding book");
   objectControls.panSpeed       = 3;
   objectControls.panHands       = 2;
   objectControls.panFingers     = [6, 12];
