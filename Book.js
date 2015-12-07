@@ -111,6 +111,14 @@ Book.prototype.open = function (yPosition, callback) {
 	}).start();
 }
 
+Book.prototype.close = function () {
+	this.front.rotation.y = 0;
+	this.back.rotation.y = 0;
+	for (var i in this.pages) {
+		this.pages[i].rotation = y;
+	}
+}
+
 Book.prototype.fall = function (shelfEdgePos, rotationSign) {
 	this.stopMoving();
 	var book = this;
