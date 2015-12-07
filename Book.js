@@ -26,25 +26,10 @@ function Book (width, height, depth, color, name) {
 	this.addInnerFrame();
 }
 
-Book.prototype.range = function () {
-	var framePos = this.frame.position;
-	var frameRot = this.frame.rotation;
-	var minX = framePos.x - 0.0 * this.width;
-	var maxX = framePos.x + 1.0 * this.width;
-  var minY = framePos.y - 0.5 * this.height;
-  var maxY = framePos.y + 0.5 * this.height;
-  var minZ = framePos.z - 0.5 * this.depth;
-  var maxZ = framePos.z + 0.5 * this.depth;
-
-  return {'minX': minX, 'maxX': maxX, 'minY': minY, 'maxY': maxY, 'minZ': minZ, 'maxZ': maxZ};
-}
-
 Book.prototype.pullOut = function () {
 	if (this.isOut) {
 		return;
 	}
-
-	this.stopMoving();
 
 	var book = this;
 	var outPos = {x: this.frame.position.x, y: this.frame.position.y, z: this.frame.position.z + this.inOutDistance};
@@ -58,8 +43,6 @@ Book.prototype.pushIn = function () {
 		return;
 	}
 
-	this.stopMoving();
-
 	var book = this;
 	var inPos = {x: this.frame.position.x, y: this.frame.position.y, z: this.frame.position.z - this.inOutDistance};
 	book.pushTween = new TWEEN.Tween(book.frame.position).to(inPos, book.inOutTime).onComplete(function () {
@@ -67,56 +50,7 @@ Book.prototype.pushIn = function () {
 	}).start();
 }
 
-Book.prototype.open = function (yPosition, callback) {
-	//stop all current motion
-	this.stopMoving();
-
-	//define helpful variables
-	var book = this;
-	book.openTime = 2000;
-	var maxYRotation = 0.9 * Math.PI/2;
-
-	//rotate the book to face forward
-	book.openRotateTween = new TWEEN.Tween(book.frame.rotation).to({y: -Math.PI/2}, book.openTime);
-
-	//rotate the front and back covers to open
-	book.openFrontTween = new TWEEN.Tween(book.front.rotation).to({y: -maxYRotation}, book.openTime);
-	book.openBackTween = new TWEEN.Tween(book.back.rotation).to({y: maxYRotation}, book.openTime);
-
-	//rotate each page
-	book.openPageTweens = [];
-	var midpoint = Math.floor(book.pages.length/2);
-	var pageRotation = maxYRotation/midpoint;
-	book.pages.forEach(function (page, index) {
-		var sign = index < midpoint ? -1 : 1;
-		var distance = Math.abs(midpoint - index);
-		var rot = distance * sign * pageRotation;
-		book.openPageTweens.push(new TWEEN.Tween(page.rotation).to({y: rot}, book.openTime));
-	});
-
-	//move the book forward, starting all rotations at the same time
-	var openPos = {x: 0, y: yPosition + 0.5 * this.height, z: 100};
-	book.openTween = new TWEEN.Tween(book.frame.position).to(openPos, book.openTime).onStart(function () {
-		book.openRotateTween.start();
-		book.openFrontTween.start();
-		book.openBackTween.start();
-		for (var i in book.openPageTweens) {
-			book.openPageTweens[i].start();
-		}
-	}).onComplete(function () {
-		if (callback) {
-			callback();
-		}
-	}).start();
-}
-
-//trying to reverse-engineer what a close book method would look like based on the open method...lol
-Book.prototype.close = function (yPosition) {
-    //to be filled in
-}
-
 Book.prototype.fall = function (shelfEdgePos, rotationSign) {
-	this.stopMoving();
 	var book = this;
 
 	//tween to move the book to the edge of the shelf
@@ -148,21 +82,6 @@ Book.prototype.fall = function (shelfEdgePos, rotationSign) {
 	}).start();
 }
 
-Book.prototype.stopMoving = function () {
-	if (this.pullTween) {
-		this.pullTween.stop();
-	}
-	if (this.pushTween) {
-		this.pullTween.stop();
-	}
-	if (this.toEdgeTween) {
-		this.toEdgeTween.stop();
-	}
-	if (this.toFloorTween) {
-		this.toFloorTween.stop();
-	}
-}
-
 //origin: center of left edge
 //extends along x-axis by this.width,
 //y-axis by 0.5 * this.height in each direction,
@@ -171,13 +90,13 @@ Book.prototype.addInnerFrame = function () {
 	this.innerFrame = new THREE.Object3D();
 	this.innerFrame.name = this.name + '#InnnerFrame';
 
-	this.front = this.makeFrontCover();
-	this.front.position.set(0, 0, 0.5 * this.depth);
-	this.innerFrame.add(this.front);
+	var front = this.makeFrontCover();
+	front.position.set(0, 0, 0.5 * this.depth);
+	this.innerFrame.add(front);
 
-	this.back = this.makeBackCover();
-	this.back.position.set(0, 0, -0.5 * this.depth);
-	this.innerFrame.add(this.back);
+	var back = this.makeBackCover();
+	back.position.set(0, 0, -0.5 * this.depth);
+	this.innerFrame.add(back);
 
 	var spine = this.makeSpine();
 	spine.rotateY(-Math.PI/2);
@@ -267,7 +186,6 @@ Book.prototype.makeSpine = function () {
 }
 
 Book.prototype.addPages = function () {
-	this.pages = [];
 	var pageFrame = this.makePage();
 	var pageDistance = this.depth/this.numPages;
 
@@ -275,7 +193,6 @@ Book.prototype.addPages = function () {
 		var page = pageFrame.clone();
 		page.position.set(0, 0, i * pageDistance - 0.5 * this.depth);
 		this.innerFrame.add(page);
-		this.pages.push(page);
 	}
 }
 

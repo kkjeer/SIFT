@@ -295,60 +295,35 @@
 
         
     //================================================================
-        
-    //test method: change CSS of the div
-    function divAppear(frame){
-        if(frame.hands.length==1){
-            console.log("pinching: " + frame.hands[0].pinchStrength==1)
-            if(frame.hands[0].pinchStrength==1){
-                document.getElementById("book").style.removeProperty("display"); //makes the div appear
-                $("#book").css('background-color',"red"); //update the color of the book div
-            }
-        }
-    }
-        
-        
     //opening and closing books in overlay div
         
-      function detectBookOpenClose(frame){
-          
-          if(frame.hands.length==1){ //if there is one hand
+      function openBook(frame){
+          if(frame.hands[0]){
               var hand = frame.hands[0];
               console.log("pinchstrength: " + hand.pinchStrength);
-              
               if(hand.pinchStrength==1){
                   if(index > -1){
-                      shelf[index].open(); //graphically open the book model
-                      //build some delay until the book is open
-                      openBookDisplay(index); //load the book overlay div
+                      openBookDisplay(index); //should this be called on the book?
                   }
-              }
-          }
-          
-          if(frame.hands.length==2){ //if there are two hands
-              var hand1 = frame.hands[0];
-              var hand2 = frame.hands[1];
-              
-              if((frame.hands[0].palmPosition.x - frame.hands[0].palmPosition.x) < 45){
-                 console.log("closing book");
               }
           }
       };
         
-        
-      //helper method: opens the overlay div
       function openBookDisplay(index){
-          console.log("open book overlay, index: " + index);
+          //fill in this function
+          console.log("open book index:" + index);
       }
-      
-      //helper method: closes the overlay div
-      function closeBookDisplay(){
-          console.log("closing the book overlay");
+        
+      function closeBook(frame){
+          if(frame.hands.length==2){
+              //check if hands are close together
+              if((frame.hands[0].palmPosition.x - frame.hands[0].palmPosition.x) < 45){
+                  console.log("closing book");
+              }
+          }
       }
-
     //================================================================
-      
-    /*
+        
       function pullOutBookPinch(frame) {
         if(frame.hands.length > 0) {
           var hand = frame.hands[0];
@@ -361,6 +336,7 @@
         }
       };
         
+
       function clickBook(frame) {
         //checks for click on object
         frame.gestures.forEach(function(gesture){
@@ -388,7 +364,6 @@
     };
       });
       };
-    */
 
     function emptyShelfSwipe(frame) {
       if(frame.hands.length > 0) {
@@ -492,8 +467,7 @@
             }
           };
 
-            
-          divAppear(frame);
+
          //clickBook(frame);
          //pullOutBookPinch(frame);
 
@@ -542,7 +516,7 @@
       <h4>by Ye Eun Jeong, Katherine Kjeer, &amp; Hye Sun Yun</h4>
     </div>
 
-    <div id="book">
+    <div id="overlay"> OVERLAY DIV
         <table id="bookpages">
           <tr>
             <td>page1</td>
