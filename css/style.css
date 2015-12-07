@@ -15,6 +15,7 @@ a {color: #ff0000;}
 /* open book CSS */
 
 #book {
+    display: none; /* hides the book and the inner table */
     width: 700px;
     height: 500px;
 

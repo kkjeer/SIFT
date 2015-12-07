@@ -295,6 +295,19 @@
 
         
     //================================================================
+        
+    //test method: change CSS of the div
+    function divAppear(frame){
+        if(frame.hands.length==1){
+            console.log("pinching: " + frame.hands[0].pinchStrength==1)
+            if(frame.hands[0].pinchStrength==1){
+                document.getElementById("book").style.removeProperty("display"); //makes the div appear
+                $("#book").css('background-color',"red"); //update the color of the book div
+            }
+        }
+    }
+        
+        
     //opening and closing books in overlay div
         
       function detectBookOpenClose(frame){
@@ -479,7 +492,8 @@
             }
           };
 
-
+            
+          divAppear(frame);
          //clickBook(frame);
          //pullOutBookPinch(frame);
 
