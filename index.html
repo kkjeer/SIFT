@@ -169,32 +169,41 @@
       };
 
 
-      
+      //*************NEEDS TO BE ENTIRELY REWRITTEN***************
       function changeControlsIndex() {
           if (lastControlsIndex == controlsIndex) {
           if (index != controlsIndex && controlsIndex > -2) {
             // new object or camera to control
             if (controlsIndex > -2) {
-                if(shelf.shelfIsEmpty){ //books are on the floor
+                if(shelf.books.length==0){
                     if(index > -1) {
-                        shelf.floor[index].unhighlight();
+                        if(shelf.floor[index]){
+                            shelf.floor[index].unhighlight();
+                        }
+                        
                         highlightedIndex = -1; //nullify highlighted book index number
                         document.getElementById("bookdesc").innerHTML = "";
                     }
                     index = controlsIndex;
                     if(index > -1) {
-                        shelf.floor[index].highlight();
+                        if(shelf.floor[index]){
+                            shelf.floor[index].highlight();
+                        }
                         highlightedIndex = index; //to pass into book drop method
                         document.getElementById("bookdesc").innerHTML = "Book number " + index;
                     }
                 }else{ //books are on the shelf
                     if(index > -1) {
-                        shelf.books[index].pushIn();
+                        if(shelf.books[index]){
+                            shelf.books[index].pushIn();
+                        }
                         document.getElementById("bookdesc").innerHTML = "";
                     }
                     index = controlsIndex;
                     if(index > -1){
-                        shelf.books[index].pullOut();
+                        if(shelf.books[index]){
+                            shelf.books[index].pullOut();
+                        }
                         document.getElementById("bookdesc").innerHTML = "Book number " + index;
                     }
                 }
