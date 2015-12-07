@@ -110,6 +110,11 @@ Book.prototype.open = function (yPosition, callback) {
 	}).start();
 }
 
+//trying to reverse-engineer what a close book method would look like based on the open method...lol
+Book.prototype.close = function (yPosition) {
+    //to be filled in
+}
+
 Book.prototype.fall = function (shelfEdgePos, rotationSign) {
 	this.stopMoving();
 	var book = this;
