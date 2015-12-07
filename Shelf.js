@@ -73,13 +73,14 @@ Shelf.prototype.addIntersectedBook = function (bookIndex) {
   }
 
   //set the y coordinate
-  var y = this.range.minY + 0.5 * this.flatThickness + 0.5 * book.height;
+  var y = shelfRange.minY + 0.5 * this.flatThickness + 0.5 * book.height;
 
   //set the z coordinate
-  var z = this.range.minZ + 0.5 * this.depth + 0.5 * book.depth;
+  var z = shelfRange.minZ + 0.5 * this.depth + 0.5 * book.depth;
 
   book.frame.position.set(x, y, z);
-  book.rotation.y = Math.PI/2;
+  book.frame.rotation.y = Math.PI/2;
+  book.unhighlight(); 
 
   this.floor.splice(bookIndex, 1);
   this.books.push(book);
@@ -94,7 +95,7 @@ Shelf.prototype.intersectsBook = function (bookIndex) {
   var shelfRange = this.range();
   var bookRange = book.range();
 
-  var xTolerance = 0.5 * book.width;
+  var xTolerance = 1.0 * book.width;
   var xMinOkay = bookRange.minX >= shelfRange.minX - xTolerance && bookRange.minX <= shelfRange.maxX + xTolerance;
   var xMaxOkay = bookRange.maxX >= shelfRange.minX - xTolerance && bookRange.maxX <= shelfRange.maxX + xTolerance;
   var xOkay = xMinOkay || xMaxOkay;

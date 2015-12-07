@@ -309,7 +309,7 @@
                 //shelf.books[index]!=null not a check anymore.
                 if(index > -1 && !bookOverlayIsOpen){
                     bookOverlayIsOpen = true;
-                    //shelf.books[index].open(shelf.frame.position.y); //not supported by Book.js anymore
+                    shelf.books[index].open(shelf.frame.position.y);
                     $("#book").css("visibility","visible");
                     openBookDisplay(index);
                     currentOpenBookIndex = index;
@@ -460,11 +460,11 @@
           bookOpenClose(frame); //open or close book on shelf
           
             
-          /*
+          
           if(highlightedIndex!=-1){
             shelf.addIntersectedBook(highlightedIndex);
           }
-          */
+          
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;
