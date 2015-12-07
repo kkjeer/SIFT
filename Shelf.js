@@ -51,7 +51,7 @@ Shelf.prototype.clearBooks = function (objectsControls) {
             edgePos.z += this.depth;
             var sign = i % 2 == 0 ? 1 : -1;
             this.books[i].fall(edgePos, sign);
-            this.books[i].unhighlight(); //unhighlight when clearing the books from shelf
+            //this.books[i].unhighlight(); //unhighlight when clearing the books from shelf
         }
         this.books = []; //empties books array
         this.shelfIsEmpty = true;

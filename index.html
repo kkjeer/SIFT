@@ -280,7 +280,9 @@
             //return scene.children.indexOf(intersected.object.name);
             var numdigits = intersected.object.name.indexOf("#");
             var objectname = intersected.object.name;
-              if(objectname.substring(0,4)=="book"){
+              if(bookOverlayIsOpen){
+                  return -1; //if book overlay is open, don't change to objectControls mode
+              }else if(objectname.substring(0,4)=="book"){
                   //console.log("object name: " + objectname);
                   return objectname.substring(4,numdigits);
               }else{
@@ -306,9 +308,11 @@
             if(frame.hands[0].pinchStrength==1){
                 //console.log("on shelf? " + (shelf.books[index]!=null));
                 
-                //only open when: it's a valid book index, book is on the shelf, and div is not already open
-                if((index > -1 && shelf.books[index]!=null) && !bookOverlayIsOpen){
+                //only open when: it's a valid book index, and div is not already open
+                //shelf.books[index]!=null not a check anymore.
+                if(index > -1 && !bookOverlayIsOpen){
                     bookOverlayIsOpen = true;
+                    //shelf.books[index].open(shelf.frame.position.y); //not supported by Book.js anymore
                     $("#book").css("visibility","visible");
                     openBookDisplay(index);
                     currentOpenBookIndex = index;
