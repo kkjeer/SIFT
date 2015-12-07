@@ -54,7 +54,7 @@ Book.prototype.pushIn = function () {
 	}).start();
 }
 
-Book.prototype.open = function (yPosition) {
+Book.prototype.open = function (yPosition, callback) {
 	//stop all current motion
 	this.stopMoving();
 
@@ -89,6 +89,10 @@ Book.prototype.open = function (yPosition) {
 		book.openBackTween.start();
 		for (var i in book.openPageTweens) {
 			book.openPageTweens[i].start();
+		}
+	}).onComplete(function () {
+		if (callback) {
+			callback();
 		}
 	}).start();
 }
@@ -174,11 +178,11 @@ Book.prototype.makeFrontCover = function () {
 
 	var frontGeom = new THREE.PlaneGeometry(this.width, this.height);
 	var frontMat = new THREE.MeshPhongMaterial({color: this.color, ambient: this.color, side: THREE.DoubleSide});
-	this.front = new THREE.Mesh(frontGeom, frontMat);
-	this.front.name = this.name + '#FrontCoverMesh';
+	this.frontMesh = new THREE.Mesh(frontGeom, frontMat);
+	this.frontMesh.name = this.name + '#FrontCoverMesh';
 
-	this.front.position.set(0.5 * this.width, 0, 0);
-	frontCoverFrame.add(this.front);
+	this.frontMesh.position.set(0.5 * this.width, 0, 0);
+	frontCoverFrame.add(this.frontMesh);
 
 	return frontCoverFrame;
 }
@@ -191,11 +195,11 @@ Book.prototype.makeBackCover = function () {
 
 	var backGeom = new THREE.PlaneGeometry(this.width, this.height);
 	var backMat = new THREE.MeshPhongMaterial({color: this.color, ambient: this.color, side: THREE.DoubleSide});
-	this.back = new THREE.Mesh(backGeom, backMat);
-	this.back.name = this.name + '#BackCoverMesh';
+	this.backMesh = new THREE.Mesh(backGeom, backMat);
+	this.backMesh.name = this.name + '#BackCoverMesh';
 
-	this.back.position.set(0.5 * this.width, 0, 0);
-	backCoverFrame.add(this.back);
+	this.backMesh.position.set(0.5 * this.width, 0, 0);
+	backCoverFrame.add(this.backMesh);
 
 	return backCoverFrame;
 }
@@ -235,11 +239,11 @@ Book.prototype.makeSpine = function () {
 	];
 	var spineGeom = new THREE.BezierSurfaceGeometry(spinePoints, 20, 20);
 	var spineMat = new THREE.MeshPhongMaterial({color: this.color, ambient: this.color, side: THREE.DoubleSide});
-	this.spine = new THREE.Mesh(spineGeom, spineMat);
-	this.spine.name = this.name + '#SpineMesh';
+	this.spineMesh = new THREE.Mesh(spineGeom, spineMat);
+	this.spineMesh.name = this.name + '#SpineMesh';
 
-	this.spine.position.set(-0.5 * this.depth, -0.5 * this.height, 0);
-	spineFrame.add(this.spine);
+	this.spineMesh.position.set(-0.5 * this.depth, -0.5 * this.height, 0);
+	spineFrame.add(this.spineMesh);
 
 	return spineFrame;
 }
@@ -276,14 +280,14 @@ Book.prototype.makePage = function () {
 
 Book.prototype.highlight = function () {
 	this.highlightColor = 0xffff00;
-	this.front.material.emissive.setHex(this.highlightColor);
-	this.back.material.emissive.setHex(this.highlightColor);
-	this.spine.material.emissive.setHex(this.highlightColor);
+	this.frontMesh.material.emissive.setHex(this.highlightColor);
+	this.backMesh.material.emissive.setHex(this.highlightColor);
+	this.spineMesh.material.emissive.setHex(this.highlightColor);
 }
 
 Book.prototype.unhighlight = function () {
 	this.unhighlightColor = 0x000000;
-	this.front.material.emissive.setHex(this.unhighlightColor);
-	this.back.material.emissive.setHex(this.unhighlightColor);
-	this.spine.material.emissive.setHex(this.unhighlightColor);
+	this.frontMesh.material.emissive.setHex(this.unhighlightColor);
+	this.backMesh.material.emissive.setHex(this.unhighlightColor);
+	this.spineMesh.material.emissive.setHex(this.unhighlightColor);
 }
