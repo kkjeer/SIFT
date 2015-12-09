@@ -354,7 +354,7 @@
         document.getElementById("bookpage1").innerHTML = "Book " + currentOpenBookIndex + "<br> Page 3";
         document.getElementById("bookpage2").innerHTML = "Book " + currentOpenBookIndex + "<br> Page 4";
     }
-        
+
     function swipeAction(frame) {
         if(frame.hands[0] && frame.gestures.length > 0){        
 
@@ -371,12 +371,13 @@
                       swipeDirection = "right to left"; // swipe for going forward, opening succeeding pages
                       turnpage(currentOpenBookIndex); //  open the book to pages 3,4
                     }
-                    //console.log("swipedirection: "+ swipeDirection);
+                    console.log("swipedirection: "+ swipeDirection);
                 
                   }else{
                         //if book overlay div is not open, clear books on the shelf
                         shelf.clearBooks(objectsControls);
-                    }
+                  }
+              
                 }
             });
 
