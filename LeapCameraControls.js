@@ -91,22 +91,22 @@ THREE.LeapCameraControls = function(camera) {
     var fl = frame.pointables.length;
     //console.log(frame.pointables);
 
+    var isHandGrab = false;
+    
+    if(frame.hands[0]){
+              var hand = frame.hands[0];
+              console.log("grabstrength: " + hand.grabStrength);
+              if(hand.grabStrength>0.8){
+                  isHandGrab = true;
+        }
+      }
+
     switch(action) {
       case 'rotate':
             
-        if (_this.rotateHands instanceof Array) {
-          if (_this.rotateFingers instanceof Array) {
-            if (_this.rotateHands[0] <= hl && hl <= _this.rotateHands[1] && _this.rotateFingers[0] <= fl && fl <= _this.rotateFingers[1]) return true;
-          } else {
-            if (_this.rotateHands[0] <= hl && hl <= _this.rotateHands[1] && _this.rotateFingers == fl) return true;
-          };
-        } else {
-          if (_this.rotateFingers instanceof Array) {
-            if (_this.rotateHands == hl && _this.rotateFingers[0] <= fl && fl <= _this.rotateFingers[1]) return true;
-          } else {
-            if (_this.rotateHands == hl && _this.rotateFingers == fl) return true;
-          };
-        };
+            if (isHandGrab) {
+              return true;
+            };
 
         break;
       case 'zoom':

@@ -62,13 +62,13 @@
         cameraControls = new THREE.LeapCameraControls(camera);
 
         
-        cameraControls.rotateEnabled  = false;          
-        cameraControls.rotateSpeed    = 3;
+        cameraControls.rotateEnabled  = true;          
+        cameraControls.rotateSpeed    = 1;
         cameraControls.rotateHands    = 1;
-        cameraControls.rotateFingers  = [4, 5];
-          
-        // cameraControls.rotateMin      = ;
-        // cameraControls.rotateMax      = ;
+        cameraControls.rotateFingers  = [4, 5]; 
+
+        cameraControls.rotateMin      = 0;
+        cameraControls.rotateMax      = Math.PI/25;
         
         cameraControls.zoomEnabled    = false;
         cameraControls.zoomSpeed      = 6;
