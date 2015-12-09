@@ -360,10 +360,20 @@
 
             frame.gestures.forEach(function(gesture){
                 if(gesture.type=="swipe"){
-                    if(bookOverlayIsOpen){
-                        //if book overlay div is open, turn pages of book
-                        turnpage(currentOpenBookIndex);
-                    }else{
+
+                  if(bookOverlayIsOpen){ // if book overlay div is open
+                    var swipeDirection = "";
+                    // check if the swipe is "right to left" or "left to right"
+                    if(gesture.direction[0] > 0){
+                      swipeDirection = "left to right"; // swipe for going back, opening previous pages
+                      openBookDisplay(currentOpenBookIndex); // open the book to pages 1,2 (original book open)
+                    } else {
+                      swipeDirection = "right to left"; // swipe for going forward, opening succeeding pages
+                      turnpage(currentOpenBookIndex); //  open the book to pages 3,4
+                    }
+                    //console.log("swipedirection: "+ swipeDirection);
+                
+                  }else{
                         //if book overlay div is not open, clear books on the shelf
                         shelf.clearBooks(objectsControls);
                     }

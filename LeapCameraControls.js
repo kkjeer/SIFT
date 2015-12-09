@@ -95,8 +95,8 @@ THREE.LeapCameraControls = function(camera) {
     
     if(frame.hands[0]){
               var hand = frame.hands[0];
-              console.log("grabstrength: " + hand.grabStrength);
-              if(hand.grabStrength>0.8){
+              //console.log("grabstrength: " + hand.grabStrength);
+              if(hand.grabStrength>1){
                   isHandGrab = true;
         }
       }
