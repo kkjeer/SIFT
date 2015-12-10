@@ -1,7 +1,64 @@
+@import url(https://fonts.googleapis.com/css?family=Special+Elite);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
 body {
   font-family: 'Special Elite', cursive;
   font-size: 12px;
   cursor: none;
 }
 
-a {color: #ff0000;}
+h4 {
+	font-family:'Open Sans', sans-serif;
+}
+
+h5{
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+
+p{
+	font-family:'Open Sans', sans-serif;
+	font-size: 12px;
+}
+
+li {
+	font-family:'Open Sans', sans-serif;
+}
+
+a {color: #368861;}
+
+.jumbotron {
+    background-color: #87a6ba;
+    color: #323232;
+    padding: 100px 25px;
+}
+
+.bg-grey {
+    background-color: #f6f6f6;
+}
+
+.container-fluid {
+    padding: 40px 30px;
+}
+
+footer .glyphicon {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #368861;
+}
+
+.navbar {
+    margin-bottom: 0;
+    z-index: 9999;
+    border: 0;
+    font-size: 12px !important;
+    line-height: 1.42857143 !important;
+    border-radius: 0;
+    font-family:'Open Sans', sans-serif;
+}
+
+.navbar-nav li a:hover, .navbar-nav li.active a {
+    background-color: #87a6ba !important;
+    color: #fff !important;
+}
+
