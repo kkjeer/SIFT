@@ -24,17 +24,18 @@
     <script type="text/javascript" src="Book.js"></script>
     <script type="text/javascript" src="Shelf.js"></script>
     <script type="text/javascript">
-         
-        
-        
+
+
+
       var camera, scene, renderer, projector, light;
       var objects = [], objectsControls = [], cameraControls;
       var coords1, coords2, coords3;
       var lastControlsIndex = -1, controlsIndex = -1, index = -1;
       var shelf;
       var bookOverlayIsOpen = false;
-      var currentOpenBookIndex = -1;
-      var nextPage = 1;
+      var currentOpenBookIndex = -1; // index of currently opened book
+      var nextPage = 1; // next page for currently opened book
+      var prevPage = 0; // previous page for currently opened book
       var highlightedIndex = -1;
       var grabbed = false;
 
@@ -62,22 +63,22 @@
         // leap camera controls
         cameraControls = new THREE.LeapCameraControls(camera);
 
-        
-        cameraControls.rotateEnabled  = true;          
+
+        cameraControls.rotateEnabled  = true;
         cameraControls.rotateSpeed    = 1;
         cameraControls.rotateHands    = 1;
-        cameraControls.rotateFingers  = [4, 5]; 
+        cameraControls.rotateFingers  = [4, 5];
 
         cameraControls.rotateMin      = 0;
-        cameraControls.rotateMax      = Math.PI/25;
-        
+        cameraControls.rotateMax      = Math.PI/35;
+
         cameraControls.zoomEnabled    = false;
         cameraControls.zoomSpeed      = 6;
         cameraControls.zoomHands      = 1;
         cameraControls.zoomFingers    = [4, 5];
         cameraControls.zoomMin        = 50;
         cameraControls.zoomMax        = 1000;
-        
+
         // The panning of the camera is disabled for the SIFT app
         cameraControls.panEnabled     = false;
         // cameraControls.panSpeed       = 2;
@@ -86,10 +87,10 @@
         // cameraControls.panRightHanded = false; // for left-handed person
 
         // world
-        scene = new THREE.Scene(); 
+        scene = new THREE.Scene();
 
         // projector
-        projector = new THREE.Projector();       
+        projector = new THREE.Projector();
 
         // camera target coordinate system
         coords1 = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), origin, 75, 0xcccccc);
@@ -112,8 +113,8 @@
         shelf = new Shelf(400, 50, 70);
         shelf.frame.position.y = 100;
         scene.add(shelf.frame);
-        shelf.addBooks(10, scene, objects, objectsControls); 
-          
+        shelf.addBooks(10, scene, objects, objectsControls);
+
 
         for (var i = 0; i < 0; i ++) {
           // var geometry = new THREE.CubeGeometry(Math.random()*60, Math.random()*60, Math.random()*60);
@@ -138,14 +139,14 @@
           //objectControls.rotateSpeed    = 3;
           //objectControls.rotateHands    = 1;
           //objectControls.rotateFingers  = [2, 3];
-          
-          // *******Get rid of the scale function on objects******** 
+
+          // *******Get rid of the scale function on objects********
           // *******Set objectControls.scaleEnabled = false
           objectControls.scaleEnabled   = false;
           objectControls.scaleSpeed     = 3;
           objectControls.scaleHands     = 1;
           objectControls.scaleFingers   = [4, 5];
-          
+
           objectControls.panEnabled     = true;
           objectControls.panSpeed       = 3;
           objectControls.panHands       = 2;
@@ -181,7 +182,7 @@
                         if(shelf.floor[index]){
                             shelf.floor[index].unhighlight();
                         }
-                        
+
                         highlightedIndex = -1; //nullify highlighted book index number
                         document.getElementById("bookdesc").innerHTML = "";
                     }
@@ -208,10 +209,10 @@
                         document.getElementById("bookdesc").innerHTML = "Book number " + index;
                     }
                 }
-                
+
             }
           };
-        }; 
+        };
         lastControlsIndex = controlsIndex;
       };
 
@@ -229,11 +230,11 @@
         return [x, y];
       };
 
-        
+
       function showCursor(frame) {
         //var hl = frame.hands.length;
         //var fl = frame.pointables.length;
-          
+
         var index_isExtended = false;
         if(frame.hands.length > 0){
             index_isExtended = frame.hands[0].fingers[1].extended;
@@ -251,19 +252,19 @@
           $("#cursor").css('top', -1000);
         };
       };
-        
+
 
       function focusObject(frame) {
         var hl = frame.hands.length;
         //var fl = frame.pointables.length;
-        
+
         var index_isExtended = false;
         if(frame.hands.length > 0){
             index_isExtended = frame.hands[0].fingers[1].extended;
         }
-          
+
         //original check:
-        if(hl==1) {          
+        if(hl==1) {
         //if (index_isExtended) {
           //console.log("entered if of focusObject");
           var f = frame.hands[0].fingers[1];
@@ -278,7 +279,7 @@
           var intersects = raycaster.intersectObjects(scene.children, true);
 
           //console.log("intersects:" + intersects.length);
-          if (intersects.length > 0) { 
+          if (intersects.length > 0) {
             //var i = 0;
             //while(!intersects[i].object.visible) i++;
             //var intersected = intersects[i];
@@ -304,17 +305,17 @@
         return -2;
       };
 
-        
+
     //================================================================
-        
+
     function bookOpenClose(frame){ //applied to books on the shelf, not on the floor
-        
+
         if(frame.hands.length==1){ //if there is one hand
-            
+
             //Open book by pinching
             if(frame.hands[0].pinchStrength > 0.8){
                 //console.log("on shelf? " + (shelf.books[index]!=null));
-                
+
                 //only open when: it's a valid book index, and div is not already open
                 //shelf.books[index]!=null not a check anymore.
                 if(index > -1 && !bookOverlayIsOpen){
@@ -325,85 +326,107 @@
                     currentOpenBookIndex = index;
                 }
             }
-            
+
         }else if(frame.hands.length==2){ //if there are two hands
-            
+
             //console.log("palm distance: " + Math.abs(frame.hands[0].palmPosition[0]-frame.hands[1].palmPosition[0]));
-            
+
             //close book when the two hands are touching
             if(Math.abs(frame.hands[0].palmPosition[0] - frame.hands[1].palmPosition[0]) < 30){
                 currentOpenBookIndex = -1;
                 bookOverlayIsOpen = false;
                 nextPage = 1;
+                prevPage = 0;
                 $("#book").css("visibility","hidden");
             }
         }
-        
-    }    
-        
+
+    }
+
     //helper to load the pages according to book index
+    // Opens the first two pages of the book
     function openBookDisplay(index){
-      for (i = nextPage; i < 3; i++) {
-        document.getElementById("bookpage"+i).innerHTML = "Book " + index + "<br> Page " + i;
-      }
-      nextPage = 3;
-        // document.getElementById("bookpage1").innerHTML = "Book " + index + "<br> Page 1";
-        // document.getElementById("bookpage2").innerHTML = "Book " + index + "<br> Page 2";
+
+        document.getElementById("bookpage1").innerHTML = "Book " + index + "<br> Page 1";
+        document.getElementById("bookpage2").innerHTML = "Book " + index + "<br> Page 2";
+
+        // Update the nextPage
+        nextPage = 3;
+      //  prevPage = 0; //prevPage stays the same so no need to update
     }
 
     //================================================================
-        
-        
+
+    // Displays the next two pages of the book
     function turnNextpage(currentOpenBookIndex){
         //upon swipe on a book overlay div, update div contents to be next two pages of the book
         //console.log("turning page of book " + currentOpenBookIndex);
-        document.getElementById("bookpage1").innerHTML = "Book " + currentOpenBookIndex + "<br> Page 3";
-        document.getElementById("bookpage2").innerHTML = "Book " + currentOpenBookIndex + "<br> Page 4";
+        document.getElementById("bookpage1").innerHTML = "Book " + currentOpenBookIndex + "<br> Page " + nextPage;
+        nextPage += 1;
+        document.getElementById("bookpage2").innerHTML = "Book " + currentOpenBookIndex + "<br> Page " + nextPage;
+        // Update the nextPage and prevPage
+        nextPage += 1;
+        prevPage += 2;
     }
 
-    function turnPrevpage(currentOpenBookIndex) {
-      
+    // Displays the prev two pages of the book
+    function turnPrevPage(currentOpenBookIndex) {
+      if (prevPage<=0) { // if the prevPage is 0 (no pages), just display the first two pages
+        openBookDisplay(currentOpenBookIndex);
+      } else {
+          prevPage -= 1;
+          document.getElementById("bookpage1").innerHTML = "Book " + currentOpenBookIndex + "<br> Page " + prevPage;
+          prevPage += 1;
+          document.getElementById("bookpage2").innerHTML = "Book " + currentOpenBookIndex + "<br> Page " + prevPage;
+          // Update the nextPage and prevPage
+          nextPage -= 2;
+          prevPage -= 2;
+      }
     }
 
+    // variables for making swipe gesture less sensitive
+    // Only one swipe evry second will perform an action
+    // This delay is needed for swipe to flip through pages. Don't want to flip over many pages at once.
     var d = new Date();
     var now = d.getTime();
     var prevSwipeTime = now;
+
     function swipeAction(frame) {
-    d = new Date();
-        if(frame.hands[0] && frame.gestures.length > 0){        
+      d = new Date();
+      if(frame.hands[0] && frame.gestures.length > 0){
 
-            frame.gestures.forEach(function(gesture){
-                if(gesture.type=="swipe"){
-                  console.log("swipe? "+gesture.type);
-                   if(prevSwipeTime + 1000 < d.getTime()) { //time elapsed, run code
-                  if(bookOverlayIsOpen){ // if book overlay div is open
-                    var swipeDirection = "";
-                    // check if the swipe is "right to left" or "left to right"
-                    if(gesture.direction[0] > 0){
-                      swipeDirection = "left to right"; // swipe for going back, opening previous pages
-                      openBookDisplay(currentOpenBookIndex); // open the book to pages 1,2 (original book open)
-                      prevSwipeTime = d.getTime();
-                    } else {
-                      swipeDirection = "right to left"; // swipe for going forward, opening succeeding pages
-                      turnNextpage(currentOpenBookIndex); //  open the book to pages 3,4
-                      prevSwipeTime = d.getTime();
-                    }
-                    console.log("swipedirection: "+ swipeDirection);
-                
-                  }else{
-                        //if book overlay div is not open, clear books on the shelf
-                        shelf.clearBooks(objectsControls);
-                        console.log("shelf cleared!");
-                        prevSwipeTime = d.getTime();
-                  } // end of shelf clear books else
-              
-                } // end of check gesture.type is swipe
-              }
-            });
+        frame.gestures.forEach(function(gesture){
+          if(gesture.type=="swipe"){
+            console.log("swipe");
+            if(prevSwipeTime + 1000 < d.getTime()) { //time elapsed, run code
+              if(bookOverlayIsOpen){ // if book overlay div is open
+                var swipeDirection = "";
+                // check if the swipe is "right to left" or "left to right"
+                if(gesture.direction[0] > 0){
+                  swipeDirection = "left to right"; // swipe for going back, opening previous pages
+                  turnPrevPage(currentOpenBookIndex); // open the book to previous two pages
+                  prevSwipeTime = d.getTime();
+                } else {
+                  swipeDirection = "right to left"; // swipe for going forward, opening succeeding pages
+                  turnNextpage(currentOpenBookIndex); //  open the book to the next two pages
+                  prevSwipeTime = d.getTime();
+                }
+                //console.log("swipedirection: "+ swipeDirection);
 
-        }
+              }else{
+                //if book overlay div is not open, clear books on the shelf
+                shelf.clearBooks(objectsControls);
+                //console.log("shelf cleared!");
+                prevSwipeTime = d.getTime();
+              } // end of shelf clear books else
+
+            } // end of check gesture.type is swipe
+          }
+        });
+
+      }
     }
-    
+
     /* //grabbing does not work effectively--too sensitive
     function grabAction(frame){
         if(frame.hands.length==2){
@@ -419,7 +442,7 @@
         }
     }
     */
-    
+
 
       function render() {
         //requestAnimationFrame(render); //temporary - for testing without the LeapMotion
@@ -433,19 +456,19 @@
         renderer.setSize($(window).width(), $(window).height());
         render();
       };
-  
-        
+
+
       $(function(){
         init();
-          
+
           (window.controller = new Leap.Controller)
           .use('riggedHand')
           .connect()
-          
+
         // leap loop
         Leap.loop(
             //-----------hand option
-            
+
             {
               hand: function(hand){
                 var label = hand.data('label');
@@ -470,16 +493,16 @@
                 hand.fingers[1].tipPosition,
                   riggedHandPlugin.camera
                 );
-                  
+
                 label.style.left = screenPosition.x +  'px';
                 label.style.bottom = screenPosition.y + 'px';
 
               }
             },
-            
-            
+
+
             //-----------callback
-            
+
         function(frame) {
 
           // show cursor
@@ -498,13 +521,13 @@
 
           swipeAction(frame); //act upon swipe
           bookOpenClose(frame); //open or close book on shelf
-          
-            
-          
+
+
+
           if(highlightedIndex!=-1){
             shelf.addIntersectedBook(highlightedIndex);
           }
-          
+
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;
@@ -516,7 +539,7 @@
 
         //original leap loop end
         //});
-            
+
         //-------------------rigged hand code---
         })
         .use('riggedHand')
@@ -537,13 +560,13 @@
         setInterval(changeControlsIndex, 250); //accomodates to slow animation time of pulling out/pushing in books
 
       });
-      
 
-    </script>   
+
+    </script>
   </head>
 
   <body>
-    
+
     <div id="info">
       <h3><b>SIFT</b></h3>
       <h4>by Ye Eun Jeong, Katherine Kjeer, &amp; Hye Sun Yun</h4>
@@ -558,7 +581,7 @@
            </tr>
          </table>
      </div>
-      
+
     <div id="container"></div>
     <div id="labels"></div>
     <div id="cursor"></div>
