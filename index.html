@@ -34,6 +34,7 @@
       var shelf;
       var bookOverlayIsOpen = false;
       var currentOpenBookIndex = -1;
+      var nextPage = 1;
       var highlightedIndex = -1;
       var grabbed = false;
 
@@ -333,6 +334,7 @@
             if(Math.abs(frame.hands[0].palmPosition[0] - frame.hands[1].palmPosition[0]) < 30){
                 currentOpenBookIndex = -1;
                 bookOverlayIsOpen = false;
+                nextPage = 1;
                 $("#book").css("visibility","hidden");
             }
         }
@@ -341,44 +343,62 @@
         
     //helper to load the pages according to book index
     function openBookDisplay(index){
-        document.getElementById("bookpage1").innerHTML = "Book " + index + "<br> Page 1";
-        document.getElementById("bookpage2").innerHTML = "Book " + index + "<br> Page 2";
+      for (i = nextPage; i < 3; i++) {
+        document.getElementById("bookpage"+i).innerHTML = "Book " + index + "<br> Page " + i;
+      }
+      nextPage = 3;
+        // document.getElementById("bookpage1").innerHTML = "Book " + index + "<br> Page 1";
+        // document.getElementById("bookpage2").innerHTML = "Book " + index + "<br> Page 2";
     }
 
     //================================================================
         
         
-    function turnpage(currentOpenBookIndex){
+    function turnNextpage(currentOpenBookIndex){
         //upon swipe on a book overlay div, update div contents to be next two pages of the book
         //console.log("turning page of book " + currentOpenBookIndex);
         document.getElementById("bookpage1").innerHTML = "Book " + currentOpenBookIndex + "<br> Page 3";
         document.getElementById("bookpage2").innerHTML = "Book " + currentOpenBookIndex + "<br> Page 4";
     }
 
+    function turnPrevpage(currentOpenBookIndex) {
+      
+    }
+
+    var d = new Date();
+    var now = d.getTime();
+    var prevSwipeTime = now;
     function swipeAction(frame) {
+    d = new Date();
         if(frame.hands[0] && frame.gestures.length > 0){        
 
             frame.gestures.forEach(function(gesture){
                 if(gesture.type=="swipe"){
-
+                  console.log("swipe? "+gesture.type);
+                   if(prevSwipeTime + 1000 < d.getTime()) { //time elapsed, run code
                   if(bookOverlayIsOpen){ // if book overlay div is open
                     var swipeDirection = "";
                     // check if the swipe is "right to left" or "left to right"
                     if(gesture.direction[0] > 0){
                       swipeDirection = "left to right"; // swipe for going back, opening previous pages
                       openBookDisplay(currentOpenBookIndex); // open the book to pages 1,2 (original book open)
+                      prevSwipeTime = d.getTime();
                     } else {
                       swipeDirection = "right to left"; // swipe for going forward, opening succeeding pages
-                      turnpage(currentOpenBookIndex); //  open the book to pages 3,4
+                      turnNextpage(currentOpenBookIndex); //  open the book to pages 3,4
+                      prevSwipeTime = d.getTime();
                     }
                     console.log("swipedirection: "+ swipeDirection);
                 
                   }else{
                         //if book overlay div is not open, clear books on the shelf
                         shelf.clearBooks(objectsControls);
-                  }
+                        console.log("shelf cleared!");
+                        prevSwipeTime = d.getTime();
+                  } // end of shelf clear books else
               
-                }
+                } // end of check gesture.type is swipe
+              }
             });
 
         }
