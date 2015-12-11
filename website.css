@@ -4,7 +4,6 @@
 body {
   font-family: 'Special Elite', cursive;
   font-size: 12px;
-  cursor: none;
 }
 
 h4 {
@@ -18,14 +17,31 @@ h5{
 
 p{
 	font-family:'Open Sans', sans-serif;
-	font-size: 12px;
+	font-size: 14px;
 }
 
 li {
 	font-family:'Open Sans', sans-serif;
+    font-size: 14px;
 }
 
 a {color: #368861;}
+
+img {
+    display: inline-block;
+    margin-top: 40px;
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: #f6f6f6; 
+}
+
+figcaption {
+    margin-top: -1px;
+    margin-bottom: 10px;
+    background-color: #f6f6f6;
+    padding: 10px;
+    display: table-caption;
+}
 
 .jumbotron {
     background-color: #87a6ba;

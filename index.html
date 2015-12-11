@@ -60,7 +60,16 @@
   <p>The overall goal of our project was to explore the idea of using gestures to manipulate digital and physical objects. Over the course of the semester, we have changed our project proposal and the ways of implementation.</p>
   <h5><strong>FlightMotion</strong></h5>
   <p>In the initial project proposal, we wanted to explore the idea of controlling a drone/quadcopter with gestures. FlightMotion allows users to use hand gestures while wearing an armband to control the quadcopter. They can perform standard quadcopter tasks: steering, hovering, altitude control, speed control, and stopping. We wanted FlightMotion to allow users to easily learn how to fly a drone/quadcopter through intuitive gestures.</p>
-  <!-- <img src="image/fligthmotion_sketches.PNG" alt="Sketches"> -->
+
+  <img src="image/flightmotion_sketches.PNG" alt="Sketches">
+  <figcaption>Sketches</figcaption>
+  <img src="image/flightmotion_storyboard.PNG" alt="Storyboard">
+  <figcaption>Storyboard</figcaption>
+  <img src="image/lofiprototype.jpg" alt="Low Fidelity Prototype" style="width:50%;height:50%;">
+  <figcaption>Low Fidelity Wearable Controller</figcaption>
+  <img src="image/lofidrone.jpg" alt="Low Fidelity Drone" style="width:50%;height:50%;">
+  <figcaption>Low Fidelity Drone</figcaption>
+  
   <p>However, after doing extensive research about the possibility of hacking a commercial drone, we discovered the difficulty of accomplishing it. Unless we buy a drone that allows wifi capabilities or other high-tech features, we would have to deal mostly with the hardware side. The team did not want to focus too much on hardware.</p>
   <h5><strong>Beginning of SIFT</strong></h5>
   <p>Because of the challenges of implementing FlightMotion, we began to think of an alternative topic/project to explore. The original proposal would require us to spend many many hours on the hardware aspect of the project.</p>
@@ -71,13 +80,14 @@
 <h5><strong>SIFT 0.5</strong></h5>
 <p>For the first milestone of the project, we learned how to develop in Unity and tried to implement one of the riskiest part of the project. We based our project on the <a href="https://developer.leapmotion.com/gallery/image-hands-500-blocks">demo</a> of several floating blocks . We replaced the blocks with a free book model from the asset store to the scene. Development within Unity mainly involved us dragging different components to the scene and very little of actual coding. For the first milestone of the project, we were able to have the user be able to use his/her hand to touch the book model and make it float.
 </p>
-<!-- <img> -->
+<img src="image/sift0.5.png" alt="sift0.5">
+  <figcaption>SIFT 0.5 prototype</figcaption>
 <h5><strong>SIFT 1.0</strong></h5>
 <p>However, as we learned more about the environment of developing in Unity, we discovered the difficulty of customizing gestures for the leap motion controller. Because of the steep learning curve that would be involved with learning how to customize gestures, we started to come up with some alternative ways to implement our project proposal. We decided on creating a web application using <a href="http://threejs.org/">Three.js</a> and javascript for the Leap Motion. We wanted out application to be easily accessible by many people and wanted to continue creating 3D graphics. Since Katherine has a lot of experience with Three.js, we were comfortable making the change.
 </p>
 <p>In the initial stage of developing our web application, we stumbled across an open source project that related to what we were trying to accomplish. The <a href="https://www.youtube.com/watch?v=SQDAa-cqlrA">threeleapcontrols</a> controls camera and objects of the Three.js scene with the leap motion controller. Actions like zooming, rotating, and panning are supported. This application seemed like a great stepping stone to creating our own. We started to build our application on top of the threeleapcontrols code. We replaced the floating gray blocks with a 3D shelf of books. Then we worked on customizing gestures. We wanted to create intuitive gestures for interacting in the digital library.
 </p>
-<p>Implemented Features:</p>
+<h5><strong>Implemented Features:</strong></h5>
   <ol>
     <li>Use a cursor/pointer to point to a specific book and have a visual feedback that it has been selected (pull out from the shelf or be highlighted).</li>
     <li>Add a rigged hand to visually show the gestures being done by the hand.</li>
