@@ -35,12 +35,15 @@ img {
     background-color: #f6f6f6; 
 }
 
-figcaption {
-    margin-top: -1px;
-    margin-bottom: 10px;
-    background-color: #f6f6f6;
+iframe {
+    display: inline-block;
     padding: 10px;
-    display: table-caption;
+    background-color: #f6f6f6;
+}
+
+figcaption {
+    background-color: #f6f6f6;
+    display: table-row;
 }
 
 .jumbotron {
