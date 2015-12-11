@@ -39,6 +39,13 @@
       var highlightedIndex = -1;
       var grabbed = false;
 
+      // variables for making swipe gesture less sensitive
+      // Only one swipe evry second will perform an action
+      // This delay is needed for swipe to flip through pages. Don't want to flip over many pages at once.
+      var d = new Date();
+      var now = d.getTime();
+      var prevSwipeTime = now;
+
       function init() {
         // is webgl supported?
         if (!Detector.webgl) {
@@ -383,13 +390,6 @@
           prevPage -= 2;
       }
     }
-
-    // variables for making swipe gesture less sensitive
-    // Only one swipe evry second will perform an action
-    // This delay is needed for swipe to flip through pages. Don't want to flip over many pages at once.
-    var d = new Date();
-    var now = d.getTime();
-    var prevSwipeTime = now;
 
     function swipeAction(frame) {
       d = new Date();
