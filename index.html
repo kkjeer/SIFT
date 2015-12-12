@@ -45,7 +45,7 @@
   <h3>Problem Statement</h3>
   <p>In the past, people did most of their research in physical libraries flipping through printed newspapers, magazines, books, documents, etc. However, with the spread of PDF (Portable Document Format) files, e-books, and online databases, many people are doing their research and consuming most of their information through digital books. The conventional ways of reading PDF files and e-books are scrolling through the documents on the computer or tapping/swiping on a tablet. Although tablets have a more intuitive way of interacting with digital books, they still have a lot of limitations. </p>
   <p>What are other ways of interacting with digital books?<br>How can gestures help with manipulating digital books?</p>
-  <p>SIFT is a web application for the <a href="https://www.leapmotion.com/">Leap Motion</a> that provides a new way of interacting with digital books. In SIFT, the user can use gestures that are commonly used for print books to consume digital books in a 3D library scene. With the leap motion controller, users can select, organize, open, close, and flip through pages of 3D books.</p>
+  <p>SIFT is a web application for the <a href="https://www.leapmotion.com/" target="_blank">Leap Motion</a> that provides a new way of interacting with digital books. In SIFT, the user can use gestures that are commonly used for print books to consume digital books in a 3D library scene. With the leap motion controller, users can select, organize, open, close, and flip through pages of 3D books.</p>
 </div>
 
 <div id="conceptual_design"class="container-fluid bg-grey">
@@ -71,7 +71,7 @@
   <p>However, after doing extensive research about the possibility of hacking a commercial drone, we discovered the difficulty of accomplishing it. Unless we buy a drone that allows wifi capabilities or other high-tech features, we would have to figure out how to hack a finished commercial product. This factor discouraged the team from pursuing this project idea because we did not want to focus too heavily on just hardware.</p>
   <h5><strong>Beginning of SIFT</strong></h5>
   <p>Because of the challenges of implementing FlightMotion, we began to think of an alternative topic/project to explore. The original proposal would require us to spend many many hours on the hardware aspect of the project.</p>
-  <p>Since we originally started this project by exploring the idea of moving digital or physical objects by gestures, we thought of using the <a href="https://www.oculus.com/en-us/">Oculus Rift</a> and <a href="https://www.leapmotion.com/">Leap Motion</a> to create a virtual reality where the user can move and manipulate digital objects. We initially thought of having the user be able to control a quadcopter in this VR. However, we felt like controlling a quadcopter in a virtual reality lacked in the side of practical application compared to other possible project ideas.</p>
+  <p>Since we originally started this project by exploring the idea of moving digital or physical objects by gestures, we thought of using the <a href="https://www.oculus.com/en-us/" target="_blank">Oculus Rift</a> and <a href="https://www.leapmotion.com/" target="_blank">Leap Motion</a> to create a virtual reality where the user can move and manipulate digital objects. We initially thought of having the user be able to control a quadcopter in this VR. However, we felt like controlling a quadcopter in a virtual reality lacked in the side of practical application compared to other possible project ideas.</p>
   <p>After a lengthy discussion, we collectively decided to create a virtual reality of a library where the user can use gesture control to interact with digital files (i.e. PDFs and ebooks). The user can use gestures that we commonly use for physical books to browse, search, and read digital files. One good thing about this proposal is that the HCI lab already have demos that couples the Oculus Rift and Leap Motion together. The challenge is to expand greatly upon the demos and create a virtual reality with the library metaphor.
 </p>
 <p>With this change in the direction of the project, SIFT was born. The name SIFT does not have any real meaning. It was just a name that seemed cool and fitting. </p>
@@ -83,14 +83,14 @@
 
 
 <h5><strong>SIFT 0.5</strong></h5>
-<p>For the first milestone of the project, we learned how to develop in Unity and tried to implement one of the riskiest part of the project. We based our project on the <a href="https://developer.leapmotion.com/gallery/image-hands-500-blocks">demo</a> of several floating blocks . We replaced the blocks with a free book model from the asset store to the scene. Development within Unity mainly involved us dragging different components to the scene and very little of actual coding. For the first milestone of the project, we were able to have the user be able to use his/her hand to touch the book model and make it float.
+<p>For the first milestone of the project, we learned how to develop in Unity and tried to implement one of the riskiest part of the project. We based our project on the <a href="https://developer.leapmotion.com/gallery/image-hands-500-blocks" target="_blank">demo</a> of several floating blocks . We replaced the blocks with a free book model from the asset store to the scene. Development within Unity mainly involved us dragging different components to the scene and very little of actual coding. For the first milestone of the project, we were able to have the user be able to use his/her hand to touch the book model and make it float.
 </p>
 <img src="image/sift0.5.png" alt="sift0.5" style="width:60%;height:60%;">
   <figcaption>SIFT 0.5 prototype</figcaption>
 <h5><strong>SIFT 1.0</strong></h5>
-<p>However, as we learned more about the environment of developing in Unity, we discovered the difficulty of customizing gestures for the leap motion controller. Because of the steep learning curve that would be involved with learning how to customize gestures, we started to come up with some alternative ways to implement our project proposal. We decided on creating a web application using <a href="http://threejs.org/">Three.js</a> and javascript for the Leap Motion. We wanted our application to be easily accessible by many people and wanted to continue creating 3D graphics. Since Katherine has a lot of experience with Three.js, we were comfortable making the change.
+<p>However, as we learned more about the environment of developing in Unity, we discovered the difficulty of customizing gestures for the leap motion controller. Because of the steep learning curve that would be involved with learning how to customize gestures, we started to come up with some alternative ways to implement our project proposal. We decided on creating a web application using <a href="http://threejs.org/" target="_blank">Three.js</a> and javascript for the Leap Motion. We wanted our application to be easily accessible by many people and wanted to continue creating 3D graphics. Since Katherine has a lot of experience with Three.js, we were comfortable making the change.
 </p>
-<p>In the initial stage of developing our web application, we stumbled across an open source project that related to what we were trying to accomplish. The <a href="https://www.youtube.com/watch?v=SQDAa-cqlrA">threeleapcontrols</a> controls camera and objects of the Three.js scene with the leap motion controller. Actions like zooming, rotating, and panning are supported. This application seemed like a great stepping stone to creating our own. We started to build our application on top of the threeleapcontrols code. We replaced the floating gray blocks with a 3D shelf of books. Then we worked on customizing gestures. We wanted to create intuitive gestures for interacting in the digital library.
+<p>In the initial stage of developing our web application, we stumbled across an open source project that related to what we were trying to accomplish. The <a href="https://www.youtube.com/watch?v=SQDAa-cqlrA" target="_blank">threeleapcontrols</a> controls camera and objects of the Three.js scene with the leap motion controller. Actions like zooming, rotating, and panning are supported. This application seemed like a great stepping stone to creating our own. We started to build our application on top of the threeleapcontrols code. We replaced the floating gray blocks with a 3D shelf of books. Then we worked on customizing gestures. We wanted to create intuitive gestures for interacting in the digital library.
 </p>
 <h5><strong>Implemented Features:</strong></h5>
   <ol>
@@ -125,7 +125,7 @@ One thing that we thought would be great to add is Turn.js. It is an open source
 <div id="demo" class="container-fluid bg-grey">
   <h3>Functional Prototype</h3>
   <p>ADD DEMO vid</p>
-  <p>You can learn more about the project by visiting the github page <a href="https://github.com/kkjeer/SIFT">https://github.com/kkjeer/SIFT</a>.</p>
+  <p>You can learn more about the project by visiting the github page <a href="https://github.com/kkjeer/SIFT" target="_blank">https://github.com/kkjeer/SIFT</a>.</p>
 </div>
 
 
@@ -133,7 +133,7 @@ One thing that we thought would be great to add is Turn.js. It is an open source
   <a href="#myPage" title="To Top">
     <span class="glyphicon glyphicon-chevron-up"></span>
   </a>
-  <p>CS320 Tangible User Interfaces Fall 2015</a></p>
+  <p>CS320 Tangible User Interfaces Fall 2015</p>
 </footer>
 
 <!-- Use jQuery to add smooth scrolling (when clicking on the links in the navbar) -->
