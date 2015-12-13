@@ -91,20 +91,21 @@ THREE.LeapCameraControls = function(camera) {
     var fl = frame.pointables.length;
     //console.log(frame.pointables);
 
+    // checks if hand in the frame is in a fist (hand grabbing gesture) or not
     var isHandGrab = false;
 
     if(frame.hands[0]){
               var hand = frame.hands[0];
               //console.log("grabstrength: " + hand.grabStrength);
               if(hand.grabStrength==1){
-                  isHandGrab = true;
+                  isHandGrab = true; // Hand is grabbing only when the grabStrength is 1
         }
       }
 
     switch(action) {
       case 'rotate':
 
-            if (isHandGrab) {
+            if (isHandGrab) { // rotate gesture is only applied when isHandGrab is true
               return true;
             };
 

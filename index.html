@@ -12,9 +12,7 @@
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/three.min.js"></script>
     <script type="text/javascript" src="js/tween_full.js"></script>
-    <!-- <script type="text/javascript" src="js/leap.min.js"></script> -->
     <script type="text/javascript" src="js/leap-0.6.2.js"></script>
-    <!-- <script type="text/javascript" src="js/leap-plugins-0.1.6.1.js"></script> -->
     <script type="text/javascript" src="js/leap.rigged-hand-0.1.3.js"></script>
     <script type="text/javascript" src="js/leap-plugins-0.1.11.js"></script>
     <script type="text/javascript" src="LeapCameraControls.js"></script>
@@ -39,8 +37,7 @@
       var highlightedIndex = -1;
       var grabbed = false;
 
-      // variables for making swipe gesture less sensitive
-      // Only one swipe evry second will perform an action
+      // variables for making swipe gesture less sensitive (only one swipe evry 1 second will perform an action)
       // This delay is needed for swipe to flip through pages. Don't want to flip over many pages at once.
       var d = new Date();
       var now = d.getTime();
@@ -72,14 +69,14 @@
 
 
         cameraControls.rotateEnabled  = true;
-        cameraControls.rotateSpeed    = 1;
+        cameraControls.rotateSpeed    = 0.75;
         cameraControls.rotateHands    = 1;
         cameraControls.rotateFingers  = [4, 5];
 
         cameraControls.rotateMin      = 0;
         cameraControls.rotateMax      = Math.PI/35;
 
-        cameraControls.zoomEnabled    = false;
+        cameraControls.zoomEnabled    = false; // zooming of the camera is disabled for the SIFT app
         cameraControls.zoomSpeed      = 6;
         cameraControls.zoomHands      = 1;
         cameraControls.zoomFingers    = [4, 5];
@@ -116,7 +113,7 @@
         var coords = new THREE.Line(lineGeometry, lineMaterial);
         scene.add(coords);
 
-        // **********REPLACE this part with the BOOKS and add book shelf***********
+        // add shelf and books
         shelf = new Shelf(400, 50, 70);
         shelf.frame.position.y = 100;
         scene.add(shelf.frame);
@@ -359,7 +356,7 @@
 
         // Update the nextPage
         nextPage = 3;
-      //  prevPage = 0; //prevPage stays the same so no need to update
+        //prevPage stays the same so no need to update
     }
 
     //================================================================
