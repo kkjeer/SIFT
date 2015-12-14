@@ -1,3 +1,12 @@
+/*
+Book constructor
+Purpose: creates a new Book object with a frame containing the graphical model
+Parameters:
+	width: width of the book cover
+	height: height of the book cover
+	depth: width of the book spine (distance between front and back covers)
+	index: index of the book in a Shelf array (see Shelf.js)
+*/
 function Book (width, height, depth, color, index) {
 	//properties from parameters
 	this.width = width;
@@ -21,12 +30,16 @@ function Book (width, height, depth, color, index) {
 	this.pageWidth = 0.9 * this.width;
 	this.numPages = 10;
 
-	//frame
+	//frame (graphical model)
 	this.frame = new THREE.Object3D();
 	this.frame.name = this.name;
 	this.addInnerFrame();
 }
 
+/*
+range()
+Purpose: returns an object containing the min and max x, y, and z coordinates of the book's frame
+*/
 Book.prototype.range = function () {
 	var framePos = this.frame.position;
 	var frameRot = this.frame.rotation;
@@ -40,6 +53,10 @@ Book.prototype.range = function () {
   return {'minX': minX, 'maxX': maxX, 'minY': minY, 'maxY': maxY, 'minZ': minZ, 'maxZ': maxZ};
 }
 
+/*
+pullOut()
+Purpose: animates the book in the positive z-direction (off of the shelf)
+*/
 Book.prototype.pullOut = function () {
 	if (this.isOut) {
 		return;
@@ -54,6 +71,10 @@ Book.prototype.pullOut = function () {
 	}).start();
 }
 
+/*
+pushIn()
+Purpose: animates the book in the negative z-direction (onto the shelf)
+*/
 Book.prototype.pushIn = function () {
 	if (!this.isOut) {
 		return;
@@ -68,6 +89,13 @@ Book.prototype.pushIn = function () {
 	}).start();
 }
 
+/*
+open()
+Purpose: animates the book in the positive z-direction, while animating its pages and covers open
+Parameters:
+	yPosition: y-coordinate of the book's final position
+	callback: optional callback function, to be run once the animation is complete
+*/
 Book.prototype.open = function (yPosition, callback) {
 	//stop all current motion
 	this.stopMoving();
@@ -111,6 +139,10 @@ Book.prototype.open = function (yPosition, callback) {
 	}).start();
 }
 
+/*
+close()
+Purpose: resets the covers and pages to their initial rotation (no animation)
+*/
 Book.prototype.close = function () {
 	this.front.rotation.y = 0;
 	this.back.rotation.y = 0;
@@ -119,6 +151,13 @@ Book.prototype.close = function () {
 	}
 }
 
+/*
+fall()
+Purpose: animates the book off the shelf and onto the floor
+Parameters:
+	shelfEdgePos: vector on the edge of the shelf, point at which the book begins falling to the floor
+	rotationSign: 1 or -1, determines where on the floor the book falls
+*/
 Book.prototype.fall = function (shelfEdgePos, rotationSign) {
 	this.stopMoving();
 	var book = this;
@@ -152,6 +191,10 @@ Book.prototype.fall = function (shelfEdgePos, rotationSign) {
 	}).start();
 }
 
+/*
+stopMoving()
+Purpose: stops all animations associated with the book
+*/
 Book.prototype.stopMoving = function () {
 	if (this.pullTween) {
 		this.pullTween.stop();
@@ -167,10 +210,15 @@ Book.prototype.stopMoving = function () {
 	}
 }
 
-//origin: center of left edge
-//extends along x-axis by this.width,
-//y-axis by 0.5 * this.height in each direction,
-//z-axis by 0.5 * this.depth in each direction
+/*
+addInnerFrame()
+Purpose: adds the inner frame to the graphics frame
+				 the inner frame contains the covers, spine and pages
+origin: center of left edge
+extends along x-axis by this.width,
+y-axis by 0.5 * this.height in each direction,
+z-axis by 0.5 * this.depth in each direction
+*/
 Book.prototype.addInnerFrame = function () {
 	this.innerFrame = new THREE.Object3D();
 	this.innerFrame.name = this.name + '#InnnerFrame';
@@ -192,8 +240,13 @@ Book.prototype.addInnerFrame = function () {
 	this.frame.add(this.innerFrame);
 }
 
-//origin: center of left edge
-//extends along x and y axes
+/*
+makeFrontCover()
+Purpose: returns a frame containing a planar cover
+				 separate from makeBackCover() in case of further graphical detail (title, cover image, etc.)
+origin: center of left edge
+extends along x and y axes
+*/
 Book.prototype.makeFrontCover = function () {
 	var frontCoverFrame = new THREE.Object3D();
 	frontCoverFrame.name = this.name + '#FrontCoverFrame';
@@ -209,8 +262,13 @@ Book.prototype.makeFrontCover = function () {
 	return frontCoverFrame;
 }
 
-//origin: center of left edge
-//extends along x and y axes
+/*
+makeBackCover()
+Purpose: returns a frame containing a planar cover
+				 separate from makeFronCover() in case of further graphical detail (title, cover image, etc.)
+origin: center of left edge
+extends along x and y axes
+*/
 Book.prototype.makeBackCover = function () {
 	var backCoverFrame = new THREE.Object3D();
 	backCoverFrame.name = this.name + '#BackCoverFrame';
@@ -226,8 +284,12 @@ Book.prototype.makeBackCover = function () {
 	return backCoverFrame;
 }
 
-//origin: bottom left corner
-//extends along position x and y axes, curves in positive z-direction
+/*
+makeSpine()
+Purpose: returns a frame containing a spine made from a Bezier surface
+origin: bottom left corner
+extends along position x and y axes, curves in positive z-direction
+*/
 Book.prototype.makeSpine = function () {
 	this.spineCurvature = 0.75 * this.depth;
 	var spineFrame = new THREE.Object3D();
@@ -270,6 +332,10 @@ Book.prototype.makeSpine = function () {
 	return spineFrame;
 }
 
+/*
+addPages()
+Purpose: adds this.numPages page frames to the innerFrame, spaced evenly apart
+*/
 Book.prototype.addPages = function () {
 	this.pages = [];
 	var pageFrame = this.makePage();
@@ -283,8 +349,12 @@ Book.prototype.addPages = function () {
 	}
 }
 
-//origin: center of left edge
-//extends along x and y axes
+/*
+makePage()
+Purpose: returns a frame containing a thin box-shaped page
+origin: center of left edge
+extends along x and y axes
+*/
 Book.prototype.makePage = function () {
 	var pageFrame = new THREE.Object3D();
 	pageFrame.name = this.name + '#PageFrame';
@@ -300,6 +370,10 @@ Book.prototype.makePage = function () {
 	return pageFrame;
 }
 
+/*
+highlight()
+Purpose: colors the covers and spine materials with this.highlightColor
+*/
 Book.prototype.highlight = function () {
 	this.highlightColor = 0xffff00;
 	this.frontMesh.material.emissive.setHex(this.highlightColor);
@@ -307,6 +381,10 @@ Book.prototype.highlight = function () {
 	this.spineMesh.material.emissive.setHex(this.highlightColor);
 }
 
+/*
+unhighlight()
+Purpose: resets the covers and spine materials to their original color
+*/
 Book.prototype.unhighlight = function () {
 	this.unhighlightColor = 0x000000;
 	this.frontMesh.material.emissive.setHex(this.unhighlightColor);

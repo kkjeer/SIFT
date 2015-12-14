@@ -1,18 +1,42 @@
+/*
+Shelf constructor
+Purpose: creates a new Shelf object with a frame containing a graphical model - a single box-shaped shelf
+Parameters:
+  width: width of the shelf (x-direction)
+  height: height of the shelf (y-direction)
+  depth: depth of the shelf (z-direction)
+  name: name of the shelf (to distinguish separate Shelf objects)
+*/
 function Shelf (width, height, depth, name) {
+  //from parameters
 	this.width = width;
 	this.height = height;
 	this.depth = depth;
 	this.name = name;
+
+  //predefined color
 	this.color = 0x8b3626;
 
+  //arrays to keep track of books on top of the shelf and on the floor, respectively
 	this.books = [];
-    this.floor = [];
-    this.shelfIsEmpty = false;
+  this.floor = [];
 
+  //whether or not the shelf is empty (has no books on it)
+  this.shelfIsEmpty = false;
+
+  //frame (graphical model)
 	this.frame = new THREE.Object3D();
 	this.addInnerFrame();
 }
 
+/*
+addInnerFrame()
+Purpose: adds the inner frame to the graphics frame
+origin: center of shelf
+extends along x-axis by 0.5 * this.width in each direction,
+y-axis by 0.5 * this.height in each direction,
+z-axis by 0.5 * this.depth in each direction
+*/
 Shelf.prototype.addInnerFrame = function () {
 	this.innerFrame = new THREE.Object3D();
 
@@ -22,6 +46,14 @@ Shelf.prototype.addInnerFrame = function () {
 	this.frame.add(this.innerFrame);
 }
 
+/*
+makeFlatShelf()
+Purpose: returns a single flat box-shaped shelf
+origin: center of shelf
+extends along x-axis by 0.5 * this.width in each direction,
+y-axis by 0.5 * this.height in each direction,
+z-axis by 0.5 * this.depth in each direction
+*/
 Shelf.prototype.makeFlatShelf = function () {
 	this.flatWidth = 1.1 * this.width;
 	this.flatThickness = 0.2 * this.height;
@@ -40,8 +72,10 @@ Shelf.prototype.makeFlatShelf = function () {
 	return flatFrame;
 }
 
-
-
+/*
+range()
+Purpose: returns an object containing the min and max x, y, and z coordinates of the shelf's frame
+*/
 Shelf.prototype.range = function () {
   var framePos = this.frame.position;
   var minX = framePos.x - 0.5 * this.width;
@@ -54,6 +88,14 @@ Shelf.prototype.range = function () {
   return {'minX': minX, 'maxX': maxX, 'minY': minY, 'maxY': maxY, 'minZ': minZ, 'maxZ': maxZ};
 }
 
+/*
+addIntersectedBook()
+Purpose: if the book at the given index intersects the shelf, as determined by their ranges,
+         sets the book's position so it lines up nicely with the shelf,
+         removes the book from the floor array, and adds the book to the books array
+Parameters:
+  bookIndex: index of the book to check
+*/
 Shelf.prototype.addIntersectedBook = function (bookIndex) {
   if (!this.intersectsBook(bookIndex)) {
     return;
@@ -78,33 +120,46 @@ Shelf.prototype.addIntersectedBook = function (bookIndex) {
   //set the z coordinate
   var z = shelfRange.minZ + 0.5 * this.depth + 0.5 * book.depth;
 
+  //position, rotate and unhighlight the book
   book.frame.position.set(x, y, z);
   book.frame.rotation.y = Math.PI/2;
   book.unhighlight(); 
 
+  //move the book from the floor to the books array
   this.floor[bookIndex] = undefined;
   this.books[bookIndex] = book;
 }
 
+/*
+intersectsBook()
+Purpose: returns true iff the book at the given index (in the floor array) intersects with the shelf's frame
+         as determined by the ranges of the book and the shelf
+Parameters:
+  bookIndex: index of the book to check
+*/
 Shelf.prototype.intersectsBook = function (bookIndex) {
   var book = this.floor[bookIndex];
   if (!book) {
     return false;
   }
 
+  //ranges of the shelf and book
   var shelfRange = this.range();
   var bookRange = book.range();
 
+  //check the x
   var xTolerance = 1.0 * book.width;
   var xMinOkay = bookRange.minX >= shelfRange.minX - xTolerance && bookRange.minX <= shelfRange.maxX + xTolerance;
   var xMaxOkay = bookRange.maxX >= shelfRange.minX - xTolerance && bookRange.maxX <= shelfRange.maxX + xTolerance;
   var xOkay = xMinOkay || xMaxOkay;
 
+  //check the y
   var yTolerance = 0.5 * book.height;
   var yMinOkay = bookRange.minY >= shelfRange.minY - yTolerance && bookRange.minY <= shelfRange.maxY + yTolerance;
   var yMaxOkay = bookRange.maxY >= shelfRange.minY - yTolerance && bookRange.maxY <= shelfRange.maxY + yTolerance;
   var yOkay = yMinOkay || yMaxOkay;
 
+  //check the z
   var zTolerance = 0.5 * book.depth;
   var zMinOkay = bookRange.minZ >= shelfRange.minZ - zTolerance && bookRange.minZ <= shelfRange.maxZ + zTolerance;
   var zMaxOkay = bookRange.maxZ >= shelfRange.minZ - zTolerance && bookRange.maxZ <= shelfRange.maxZ + zTolerance;
@@ -113,10 +168,10 @@ Shelf.prototype.intersectsBook = function (bookIndex) {
   return xOkay && yOkay && zOkay;
 }
 
-
-
-
-
+/*
+clearBooks()
+Purpose: make all the books on the shelf fall to the floor
+*/
 Shelf.prototype.clearBooks = function (objectsControls) {
     if(this.floor.length == 0){ //check if it's already registered a swipe gesture before
         this.floor = this.books; //floor gets all books
@@ -124,7 +179,6 @@ Shelf.prototype.clearBooks = function (objectsControls) {
         for (var i in this.books) {
             var edgePos = new THREE.Vector3().copy(this.books[i].frame.position);
             var bookXSign = edgePos.x == 0 ? 0 : edgePos.x/Math.abs(edgePos.x);
-            //edgePos.x += bookXSign * i * this.bookSpacing;
             edgePos.z += this.depth;
             var sign = i % 2 == 0 ? 1 : -1;
             this.books[i].fall(edgePos, sign);
@@ -163,6 +217,10 @@ Shelf.prototype.clearBooks = function (objectsControls) {
     }
 }
 
+/*
+addBook()
+Purpose: adds one book to the shelf, updating the objects and the objectsControls arrays in the process
+*/
 Shelf.prototype.addBook = function (scene, objects, objectsControls) {
 	var shelfPos = this.frame.position;
 	var bookWidth = this.depth;
@@ -208,6 +266,10 @@ Shelf.prototype.addBook = function (scene, objects, objectsControls) {
   objectsControls.push(objectControls);
 }
 
+/*
+addBooks()
+Purpose: adds numBooks books to the shelf
+*/
 Shelf.prototype.addBooks = function (numBooks, scene, objects, objectsControls) {
 	this.numBooks = numBooks;
 	var shelfPos = this.frame.position;
