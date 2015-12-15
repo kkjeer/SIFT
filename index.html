@@ -1,3 +1,4 @@
+<!--SIFT: CS320 Final Project by Ye Eun Jeong, Katherine Kjeer, Hye Sun Yun-->
 <!DOCTYPE html>
 <html>
   <head>
@@ -175,7 +176,7 @@
       };
 
 
-      //*************NEEDS TO BE ENTIRELY REWRITTEN***************
+      //********************************** Note: Book.js got updated so that books can be referred to on and off the shelf
       function changeControlsIndex() {
           if (lastControlsIndex == controlsIndex) {
           if (index != controlsIndex && controlsIndex > -2) {
@@ -347,7 +348,7 @@
 
     }
 
-    //helper to load the pages according to book index
+    // helper to load the pages according to book index
     // Opens the first two pages of the book
     function openBookDisplay(index){
 
@@ -464,29 +465,17 @@
 
         // leap loop
         Leap.loop(
-            //-----------hand option
-
+            //hand option for the rigged hand model
             {
               hand: function(hand){
                 var label = hand.data('label');
-
-
                 if (!label){
-
                   label = document.createElement('label');
-                  //document.body.appendChild(label);
-
-                  //label.innerHTML = hand.type + " hand";
-
                   hand.data('label', label)
-
                 }
 
-
                 var handMesh = hand.data('riggedHand.mesh');
-
                 var screenPosition = handMesh.screenPosition(
-                  //hand.palmPosition,
                 hand.fingers[1].tipPosition,
                   riggedHandPlugin.camera
                 );
@@ -496,10 +485,8 @@
 
               }
             },
-
-
-            //-----------callback
-
+        
+        //callback function
         function(frame) {
 
           // show cursor
@@ -515,16 +502,12 @@
             }
           };
 
-
           swipeAction(frame); //act upon swipe
           bookOpenClose(frame); //open or close book on shelf
-
-
 
           if(highlightedIndex!=-1){
             shelf.addIntersectedBook(highlightedIndex);
           }
-
 
           // custom modifications (here: show coordinate system always on target and light movement)
           coords1.position = cameraControls.target;
@@ -534,10 +517,7 @@
 
           render();
 
-        //original leap loop end
-        //});
-
-        //-------------------rigged hand code---
+        //-------------------rigged hand--------
         })
         .use('riggedHand')
         .use('handEntry')
